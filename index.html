@@ -81,7 +81,7 @@
         /* 自动更新日期时间样式 */
         .realtime-clock {
             font-size: 2vw; color: #95a5a6;
-            font-family: 'Courier New', Courier, monospace; /* 等宽字体，防止数字跳动 */
+            font-family: 'Courier New', Courier, monospace; 
         }
 
         /* 呼吸闪烁动画 */
@@ -110,7 +110,7 @@
     <!-- 底部信息栏 -->
     <div class="bottom-bar">
         <div id="scheduleDisplay" class="schedule"></div>
-        <div id="clockDisplay" class="realtime-clock"></div> <!-- 新增的实时时钟 -->
+        <div id="clockDisplay" class="realtime-clock"></div> 
     </div>
 
     <script>
@@ -170,7 +170,7 @@
             // 3. 根据时间段切换主提示
             mainDisplay.innerHTML = '';
             countdownDisplay.innerHTML = '';
-            btnContainer.innerHTML = ''; 
+            btnContainer.innerHTML = ''; // 每次重置按钮
 
             // === 22:30 之后：小组讨论模式 ===
             if (hours > 22 || (hours === 22 && minutes >= 30)) {
@@ -184,7 +184,7 @@
                 mainDisplay.style.textShadow = '3px 3px 0 #2c3e50, 6px 6px 0 rgba(0,0,0,0.3)';
                 mainDisplay.innerHTML = '今天练字已经完成，<br>具体怎么样还是要靠自觉啊 🤔';
             } 
-            // === 18:50 - 19:00：练字大字报 ===
+            // === 18:50 - 19:00：练字大字报 + 按钮触发区 ===
             else if (hours === 18 && minutes >= 50) {
                 mainDisplay.className = 'main-text';
                 mainDisplay.style.color = '#f1c40f'; 
@@ -198,6 +198,8 @@
                     countdownDisplay.className = 'countdown practice';
                     countdownDisplay.innerHTML = `<span class="heartbeat-anim">⏱️</span> 距离练字结束还有：${formatTime(practiceDiff)}`;
                 }
+                
+                // 【核心修复】在这里渲染按钮逻辑
                 renderButtons(btnContainer);
             } 
             // === 18:50 之前：练字提示模式 ===
@@ -215,7 +217,7 @@
             }
         }
 
-        // 渲染按钮逻辑
+        // 【核心修复】渲染按钮的独立函数
         function renderButtons(container) {
             if (btnState === 0) {
                 container.innerHTML = `<button class="btn btn-rebel" onclick="changeBtnState(1)">我不想练字</button>`;
@@ -234,6 +236,7 @@
             }
         }
 
+        // 切换按钮状态
         window.changeBtnState = function(state) {
             btnState = state;
             checkTime(); 
@@ -251,7 +254,6 @@
         // 页面加载时立即执行一次
         checkTime();
         updateClock();
-        // 每秒更新一次时间和页面状态
         setInterval(checkTime, 1000);
         setInterval(updateClock, 1000);
     </script>
