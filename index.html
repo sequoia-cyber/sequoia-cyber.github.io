@@ -65,13 +65,24 @@
         .btn-stubborn { background-color: #c0392b; color: #fff; }
         .btn-admit { background-color: #27ae60; color: #fff; }
 
-        /* 科目表样式（常驻底部） */
+        /* 底部信息栏（包含科目表与日期时间） */
+        .bottom-bar {
+            position: absolute; bottom: 30px;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+
+        /* 科目表样式 */
         .schedule {
-            position: absolute; bottom: 30px; font-size: 2.5vw; line-height: 1.8;
-            color: #ecf0f1; background: rgba(255,255,255,0.1);
-            padding: 15px 40px; border-radius: 10px; display: inline-block;
+            font-size: 2.5vw; line-height: 1.8; color: #ecf0f1;
+            background: rgba(255,255,255,0.1); padding: 15px 40px; border-radius: 10px;
         }
         .schedule span { color: #f1c40f; font-weight: bold; }
+
+        /* 自动更新日期时间样式 */
+        .realtime-clock {
+            font-size: 2vw; color: #95a5a6;
+            font-family: 'Courier New', Courier, monospace; /* 等宽字体，防止数字跳动 */
+        }
 
         /* 呼吸闪烁动画 */
         @keyframes pulse {
@@ -96,23 +107,39 @@
         <div id="btnContainer" class="btn-group"></div>
     </div>
 
-    <!-- 常驻底部的科目表 -->
-    <div id="scheduleDisplay" class="schedule"></div>
+    <!-- 底部信息栏 -->
+    <div class="bottom-bar">
+        <div id="scheduleDisplay" class="schedule"></div>
+        <div id="clockDisplay" class="realtime-clock"></div> <!-- 新增的实时时钟 -->
+    </div>
 
     <script>
         // ================= 自定义配置区 =================
-        // 在这里修改横幅内容，支持自定义！
         const MARQUEE_TEXT = "张正凯老师提醒您：把电子教室连起来哦 📢 张正凯老师提醒您：把电子教室连起来哦 📢";
-        
-        // 科目表配置 (0:周日, 1:周一 ... 6:周六)
         const scheduleMap = { 0: '语文', 1: '数学', 2: '英语', 3: '物理', 4: '化学', 5: '生物学', 6: '语文' };
+        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
         // ================================================
 
         // 初始化横幅
         document.getElementById('customMarquee').innerText = MARQUEE_TEXT;
 
         // 按钮状态控制
-        let btnState = 0; // 0: 初始, 1: 点了不想练, 2: 点了还是不想, 3: 认错
+        let btnState = 0; 
+
+        // 更新实时日期和时间的函数
+        function updateClock() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const weekDay = weekDays[now.getDay()];
+            
+            let h = String(now.getHours()).padStart(2, '0');
+            let m = String(now.getMinutes()).padStart(2, '0');
+            let s = String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('clockDisplay').innerText = `📅 ${year}年${month}月${day}日 ${weekDay} | ⏰ 当前时间：${h}:${m}:${s}`;
+        }
 
         function checkTime() {
             const now = new Date();
@@ -143,7 +170,7 @@
             // 3. 根据时间段切换主提示
             mainDisplay.innerHTML = '';
             countdownDisplay.innerHTML = '';
-            btnContainer.innerHTML = ''; // 每次重置按钮
+            btnContainer.innerHTML = ''; 
 
             // === 22:30 之后：小组讨论模式 ===
             if (hours > 22 || (hours === 22 && minutes >= 30)) {
@@ -153,27 +180,24 @@
             // === 19:00 - 22:29：练字结束灵魂拷问 ===
             else if (hours >= 19) {
                 mainDisplay.className = 'main-text';
-                mainDisplay.style.color = '#95a5a6'; // 换成冷色调
+                mainDisplay.style.color = '#95a5a6'; 
                 mainDisplay.style.textShadow = '3px 3px 0 #2c3e50, 6px 6px 0 rgba(0,0,0,0.3)';
                 mainDisplay.innerHTML = '今天练字已经完成，<br>具体怎么样还是要靠自觉啊 🤔';
             } 
             // === 18:50 - 19:00：练字大字报 ===
             else if (hours === 18 && minutes >= 50) {
                 mainDisplay.className = 'main-text';
-                mainDisplay.style.color = '#f1c40f'; // 恢复亮黄色
+                mainDisplay.style.color = '#f1c40f'; 
                 mainDisplay.style.textShadow = '3px 3px 0 #e74c3c, 6px 6px 0 rgba(0,0,0,0.3)';
                 mainDisplay.innerHTML = '什么时间该做什么事了，<br>不需要我多说了吧！';
                 
-                // 显示练字倒计时
                 let practiceTarget = new Date(now);
-                practiceTarget.setHours(19, 0, 0, 0); // 倒计时到19:00结束
+                practiceTarget.setHours(19, 0, 0, 0); 
                 let practiceDiff = practiceTarget - now;
                 if (practiceDiff > 0) {
                     countdownDisplay.className = 'countdown practice';
                     countdownDisplay.innerHTML = `<span class="heartbeat-anim">⏱️</span> 距离练字结束还有：${formatTime(practiceDiff)}`;
                 }
-
-                // 渲染按钮逻辑
                 renderButtons(btnContainer);
             } 
             // === 18:50 之前：练字提示模式 ===
@@ -210,10 +234,9 @@
             }
         }
 
-        // 切换按钮状态
         window.changeBtnState = function(state) {
             btnState = state;
-            checkTime(); // 重新渲染
+            checkTime(); 
         }
 
         // 格式化时间函数
@@ -227,7 +250,10 @@
 
         // 页面加载时立即执行一次
         checkTime();
+        updateClock();
+        // 每秒更新一次时间和页面状态
         setInterval(checkTime, 1000);
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
