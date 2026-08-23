@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>班级日程提醒</title>
     <style>
-        /* 全局样式：彻底抛弃宋体，使用微软雅黑 */
+        /* 全局样式：彻底抛弃宋体，统一使用现代无衬线字体 */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #111; color: #fff;
-            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
             overflow: hidden; display: flex; flex-direction: column;
             justify-content: center; align-items: center;
         }
-
         /* 顶部滚动横幅样式 */
         .marquee-container {
             position: absolute; top: 0; width: 100%;
@@ -22,10 +21,8 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 10;
         }
         marquee { color: #fff; }
-
         /* 主内容区域样式 */
         .content-box { text-align: center; padding: 20px; max-width: 90%; }
-
         /* 大字报核心文字样式 */
         .main-text {
             font-size: 5vw; font-weight: 900; line-height: 1.3;
@@ -33,17 +30,16 @@
             text-shadow: 3px 3px 0 #e74c3c, 6px 6px 0 rgba(0,0,0,0.3);
             animation: pulse 2s infinite;
         }
-
-        /* 倒计时通用样式 */
+        /* 倒计时通用样式：现代化字体 + 等宽数字 */
         .countdown {
             font-size: 3vw; font-weight: bold; margin-top: 20px;
-            font-family: 'Courier New', Courier, monospace; 
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
+            font-variant-numeric: tabular-nums; letter-spacing: 1px;
             transition: color 0.5s ease; /* 颜色切换增加平滑过渡 */
         }
-        .countdown.practice { color: #3498db; } 
-        .countdown.discuss { color: #2ecc71; }  
+        .countdown.practice { color: #3498db; }
+        .countdown.discuss { color: #2ecc71; }
         .countdown.discuss.active { color: #e74c3c; } /* 22:30后激活红色 */
-
         /* 倒计时趣味心跳动画 */
         @keyframes heartbeat {
             0% { transform: scale(1); }
@@ -53,94 +49,192 @@
             60% { transform: scale(1); }
         }
         .heartbeat-anim { display: inline-block; animation: heartbeat 1s infinite; }
-
         /* 提示文字与按钮样式 */
         .sub-text { font-size: 3vw; color: #bdc3c7; margin-top: 30px; line-height: 1.6; }
         .btn-group { margin-top: 40px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
         .btn {
             padding: 15px 30px; font-size: 2vw; border: none; border-radius: 50px;
             cursor: pointer; font-weight: bold; transition: all 0.3s;
-            font-family: "Microsoft YaHei", Arial, sans-serif;
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
         }
         .btn:hover { transform: scale(1.05); opacity: 0.9; }
         .btn-rebel { background-color: #e67e22; color: #fff; }
         .btn-stubborn { background-color: #c0392b; color: #fff; }
         .btn-admit { background-color: #27ae60; color: #fff; }
-
         /* 底部信息栏（包含科目表、时钟与名言） */
         .bottom-bar {
             position: absolute; bottom: 30px;
             display: flex; flex-direction: column; align-items: center; gap: 15px;
         }
-
-        /* 科目表样式 */
+        /* 科目表样式：现代化字体 */
         .schedule {
             font-size: 2.5vw; line-height: 1.8; color: #ecf0f1;
             background: rgba(255,255,255,0.1); padding: 15px 40px; border-radius: 10px;
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
+            font-weight: 500; letter-spacing: 1px;
         }
         .schedule span { color: #f1c40f; font-weight: bold; }
-
-        /* 自动更新日期时间样式 */
+        /* 自动更新日期时间样式：现代化字体 + 等宽数字 */
         .realtime-clock {
             font-size: 2vw; color: #95a5a6;
-            font-family: 'Courier New', Courier, monospace; 
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
+            font-variant-numeric: tabular-nums; letter-spacing: 1px;
         }
-
-        /* 名言生成器样式 */
+        /* 名言生成器样式：现代化字体，去掉老旧斜体 */
         .quote-box {
             display: flex; align-items: center; gap: 15px;
-            font-size: 1.8vw; color: #f39c12; font-style: italic;
+            font-size: 1.8vw; color: #f39c12;
             background: rgba(243, 156, 18, 0.1); padding: 10px 25px; border-radius: 20px;
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
+            font-weight: 500;
         }
+        #quoteDisplay { display: inline-block; transition: opacity 0.25s ease, transform 0.25s ease; }
+        #quoteDisplay.quote-out { opacity: 0; transform: translateY(10px); }
         .quote-btn {
             padding: 8px 15px; font-size: 1.5vw; border: none; border-radius: 15px;
             background-color: #f39c12; color: #111; cursor: pointer; font-weight: bold;
             transition: all 0.3s;
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
         }
         .quote-btn:hover { background-color: #e67e22; transform: scale(1.05); }
-
+        /* “换一句”按钮点击弹跳旋转动画 */
+        .quote-btn.spinning { animation: quoteBtnPop 0.6s ease; }
+        @keyframes quoteBtnPop {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.3) rotate(-10deg); }
+            55% { transform: scale(0.9) rotate(8deg); }
+            80% { transform: scale(1.1) rotate(-3deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
         /* 呼吸闪烁动画 */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.03); }
             100% { transform: scale(1); }
         }
+        /* ============ 顶部控制区：语言切换 + 主题切换 ============ */
+        .top-controls {
+            position: absolute; top: 70px; right: 20px; z-index: 20;
+            display: flex; gap: 12px; align-items: center;
+        }
+        .theme-btn {
+            padding: 10px 22px; font-size: 1.5vw; border: none; border-radius: 30px;
+            cursor: pointer; font-weight: bold; transition: all 0.3s;
+            background-color: #34495e; color: #fff;
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+        }
+        .theme-btn:hover { transform: scale(1.08); opacity: 0.92; }
+        .lang-select {
+            padding: 10px 18px; font-size: 1.5vw; border: none; border-radius: 30px;
+            cursor: pointer; font-weight: bold; transition: all 0.3s;
+            background-color: #34495e; color: #fff;
+            font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35); outline: none;
+        }
+        .lang-select:hover { transform: scale(1.05); opacity: 0.92; }
+        /* 高考倒计时配色（默认深色主题） */
+        .countdown.gaokao { color: #ffb84d; }
+        /* ============ 日间（浅色）主题 ============ */
+        body.theme-light { background-color: #f5f6fa; color: #2c3e50; }
+        body.theme-light .sub-text { color: #7f8c8d; }
+        body.theme-light .schedule { background: rgba(0,0,0,0.06); color: #2c3e50; }
+        body.theme-light .schedule span { color: #e67e22; }
+        body.theme-light .realtime-clock { color: #7f8c8d; }
+        body.theme-light .quote-box { background: rgba(243,156,18,0.15); color: #d35400; }
+        body.theme-light .main-text {
+            color: #d35400 !important;
+            text-shadow: 3px 3px 0 rgba(231,76,60,0.35), 6px 6px 0 rgba(0,0,0,0.08) !important;
+        }
+        body.theme-light .countdown.gaokao { color: #e67e22; }
+        body.theme-light .theme-btn, body.theme-light .lang-select { background-color: #2c3e50; }
+        /* ============ 护眼绿主题 ============ */
+        body.theme-green { background-color: #c7edcc; color: #1e4d2b; }
+        body.theme-green .sub-text { color: #3a6b4a; }
+        body.theme-green .schedule { background: rgba(0,0,0,0.08); color: #1e4d2b; }
+        body.theme-green .schedule span { color: #c0392b; }
+        body.theme-green .realtime-clock { color: #2f6b3f; }
+        body.theme-green .quote-box { background: rgba(46,125,50,0.12); color: #2e7d32; }
+        body.theme-green .main-text {
+            color: #2e7d32 !important;
+            text-shadow: 3px 3px 0 rgba(255,152,0,0.45), 6px 6px 0 rgba(0,0,0,0.10) !important;
+        }
+        body.theme-green .countdown.gaokao { color: #d9480f; }
+        body.theme-green .theme-btn, body.theme-green .lang-select { background-color: #2e7d32; }
     </style>
 </head>
 <body>
-
+    <!-- 顶部控制区：语言切换 + 主题切换 -->
+    <div class="top-controls">
+        <select id="langSelect" class="lang-select" onchange="setLanguage(this.value)">
+            <option value="zh">中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+            <option value="ru">Русский</option>
+            <option value="de">Deutsch</option>
+        </select>
+        <button id="themeToggleBtn" class="theme-btn" onclick="toggleTheme()">🌙 深色模式</button>
+    </div>
     <!-- 顶部滚动横幅 -->
     <div class="marquee-container">
         <marquee id="customMarquee" behavior="scroll" direction="left" scrollamount="8"></marquee>
     </div>
-
     <!-- 主内容区域 -->
     <div class="content-box">
         <div id="mainDisplay"></div>
         <div id="countdownDisplay"></div>
         <div id="discussCountdownDisplay" class="countdown discuss"></div>
+        <div id="gaokaoCountdownDisplay" class="countdown gaokao"></div>
         <div id="btnContainer" class="btn-group"></div>
     </div>
-
     <!-- 底部信息栏 -->
     <div class="bottom-bar">
         <div id="scheduleDisplay" class="schedule"></div>
-        <div id="clockDisplay" class="realtime-clock"></div> 
+        <div id="clockDisplay" class="realtime-clock"></div>
         <!-- 名言生成器 -->
         <div class="quote-box">
             <span id="quoteDisplay"></span>
-            <button class="quote-btn" onclick="generateQuote()">换一句</button>
+            <button id="quoteBtn" class="quote-btn" onclick="quoteBtnClick(this)">换一句</button>
         </div>
     </div>
-
     <script>
         // ================= 自定义配置区 =================
         const MARQUEE_TEXT = "君子曰：学不可以已。青，取之于蓝，而青于蓝；冰，水为之，而寒于水。木直中绳，𫐓以为轮，其曲中规。虽有槁暴，不复挺者，𫐓使之然也。故木受绳则直，金就砺则利，君子博学而日参省乎己，则知明而行无过矣。故不登高山，不知天之高也；不临深溪，不知地之厚也；不闻先王之遗言，不知学问之大也。干、越、夷、貉之子，生而同声，长而异俗，教使之然也。诗曰：“嗟尔君子，无恒安息。靖共尔位，好是正直。神之听之，介尔景福。”神莫大于化道，福莫长于无祸。吾尝终日而思矣，不如须臾之所学也；吾尝跂而望矣，不如登高之博见也。登高而招，臂非加长也，而见者远；顺风而呼，声非加疾也，而闻者彰。假舆马者，非利足也，而致千里；假舟楫者，非能水也，而绝江河。君子生非异也，善假于物也。(君子生 通：性)南方有鸟焉，名曰蒙鸠，以羽为巢，而编之以发，系之苇苕，风至苕折，卵破子死。巢非不完也，所系者然也。西方有木焉，名曰射干，茎长四寸，生于高山之上，而临百仞之渊，木茎非能长也，所立者然也。蓬生麻中，不扶而直；白沙在涅，与之俱黑。兰槐之根是为芷，其渐之滫，君子不近，庶人不服。其质非不美也，所渐者然也。故君子居必择乡，游必就士，所以防邪辟而近中正也。物类之起，必有所始。荣辱之来，必象其德。肉腐出虫，鱼枯生蠹。怠慢忘身，祸灾乃作。强自取柱，柔自取束。邪秽在身，怨之所构。施薪若一，火就燥也，平地若一，水就湿也。草木畴生，禽兽群焉，物各从其类也。是故质的张，而弓矢至焉；林木茂，而斧斤至焉；树成荫，而众鸟息焉。醯酸，而蜹聚焉。故言有招祸也，行有招辱也，君子慎其所立乎！积土成山，风雨兴焉；积水成渊，蛟龙生焉；积善成德，而神明自得，圣心备焉。故不积跬步，无以至千里；不积小流，无以成江海。骐骥一跃，不能十步；驽马十驾，功在不舍。锲而舍之，朽木不折；锲而不舍，金石可镂。蚓无爪牙之利，筋骨之强，上食埃土，下饮黄泉，用心一也。蟹六跪而二螯，非蛇鳝之穴无可寄托者，用心躁也。(江海 一作：江河)是故无冥冥之志者，无昭昭之明；无惛惛之事者，无赫赫之功。行衢道者不至，事两君者不容。目不能两视而明，耳不能两听而聪。螣蛇无足而飞，鼫鼠五技而穷。《诗》曰：“尸鸠在桑，其子七兮。淑人君子，其仪一兮。其仪一兮，心如结兮！”故君子结于一也。昔者瓠巴鼓瑟，而流鱼出听；伯牙鼓琴，而六马仰秣。故声无小而不闻，行无隐而不形。玉在山而草木润，渊生珠而崖不枯。为善不积邪？安有不闻者乎？学恶乎始？恶乎终？曰：其数则始乎诵经，终乎读礼；其义则始乎为士，终乎为圣人，真积力久则入，学至乎没而后止也。故学数有终，若其义则不可须臾舍也。为之，人也；舍之，禽兽也。故书者，政事之纪也；诗者，中声之所止也；礼者，法之大分，类之纲纪也，故学至乎礼而止矣。夫是之谓道德之极。礼之敬文也，乐之中和也，诗书之博也，春秋之微也，在天地之间者毕矣。君子之学也，入乎耳，箸乎心，布乎四体，形乎动静。端而言，蝡而动，一可以为法则。小人之学也，入乎耳，出乎口；口耳之间，则四寸耳，曷足以美七尺之躯哉！古之学者为己，今之学者为人。君子之学也，以美其身；小人之学也，以为禽犊。故不问而告谓之傲，问一而告二谓之囋。傲非也，囋非也；君子如向矣。学莫便乎近其人。礼乐法而不说，诗书故而不切，春秋约而不速。方其人之习君子之说，则尊以遍矣，周于世矣。故曰：学莫便乎近其人。学之经莫速乎好其人，隆礼次之。上不能好其人，下不能隆礼，安特将学杂识志，顺诗书而已耳。则末世穷年，不免为陋儒而已。将原先王，本仁义，则礼正其经纬蹊径也。若挈裘领，诎五指而顿之，顺者不可胜数也。不道礼宪，以诗书为之，譬之犹以指测河也，以戈舂黍也，以锥餐壶也，不可以得之矣。故隆礼，虽未明，法士也；不隆礼，虽察辩，散儒也。问楛者，勿告也；告楛者，勿问也；说楛者，勿听也。有争气者，勿与辩也。故必由其道至，然后接之；非其道则避之。故礼恭，而后可与言道之方；辞顺，而后可与言道之理；色从而后可与言道之致。故未可与言而言，谓之傲；可与言而不言，谓之隐；不观气色而言，谓瞽。故君子不傲、不隐、不瞽，谨顺其身。诗曰：“匪交匪舒，天子所予。”此之谓也。百发失一，不足谓善射；千里蹞步不至，不足谓善御；伦类不通，仁义不一，不足谓善学。学也者，固学一之也。一出焉，一入焉，涂巷之人也；其善者少，不善者多，桀纣盗跖也；全之尽之，然后学者也。君子知夫不全不粹之不足以为美也，故诵数以贯之，思索以通之，为其人以处之，除其害者以持养之。使目非是无欲见也，使耳非是无欲闻也，使口非是无欲言也，使心非是无欲虑也。及至其致好之也，目好之五色，耳好之五声，口好之五味，心利之有天下。是故权利不能倾也，群众不能移也，天下不能荡也。生乎由是，死乎由是，夫是之谓德操。德操然后能定，能定然后能应。能定能应，夫是之谓成人。天见其明，地见其光，君子贵其全也。";
-        const scheduleMap = { 0: '语文', 1: '数学', 2: '英语', 3: '物理', 4: '化学', 5: '生物学', 6: '无' };
-        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-        
-        // 名言库
-        const quotes = [
+
+        // 高考倒计时目标时间：2027年6月7日09:00（2027年高考开考，如需修改改这一处即可）
+        const GAOKAO_TARGET = new Date(2027, 5, 7, 9, 0, 0);
+
+        // ================= 多语言库（8种语言） =================
+        const I18N = {
+            zh: {
+                htmlLang: 'zh-CN', title: '班级日程提醒',
+                weekdays: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                months: null,
+                datePattern: '{y}年{m}月{d}日 {wd}',
+                clockLabel: '当前时间：',
+                todaySched: '今日科目：', tomorrowSched: '明日科目：',
+                subjects: ['语文', '数学', '英语', '物理', '化学', '生物学', '无'],
+                practiceIn: '距离练字还有：', practiceEnd: '距离练字结束还有：',
+                discussIn: '距离小组讨论还有：', discussNow: '小组讨论进行中...',
+                gaokaoIn: '距离2027年高考还有：', gaokaoDay: '天',
+                gaokaoNow: '2027年高考已经开始，同学们加油！',
+                mainNight: '什么时间该做什么事了哦，<br>昨天的讨论效果还是不错的哦。<br><span style="font-size:0.8em; color:#fff;">友情提示：<br>把你们的数理化作业收起来哦！</span>',
+                mainDone: '今天练字已经完成，<br>具体怎么样还是要靠自觉啊 🤔',
+                mainHurry: '什么时间该做什么事了，<br>不需要我多说了吧！',
+                mainChinese: '语文也是150分哦，虽然不像数学物理那么难学，但也是重要的哦 ✍️',
+                btnNoPractice: '我不想练字',
+                btnRebelText: '你做的这道题，高考肯定不考。<br>但是你高考总是要写字的啊。',
+                btnStillNo: '我还是不想练字',
+                btnLifeText: '再不练字你的人生已经掉链子了！！',
+                btnAdmit: '恩师我知道错了，我这就去练字',
+                btnGoodText: '知错能改，善莫大焉！赶紧动笔吧！✍️',
+                quoteBtn: '换一句',
+                themeBtn: { dark: '深色模式', light: '日间模式', green: '护眼绿模式' },
+                marquee: MARQUEE_TEXT,
+                quotes: [
             "字如其人，立品为先。",
             "笔秃千管，墨磨万锭，方得一字之妙。",
             "心正则笔正，笔正乃可法矣。",
@@ -159,145 +253,440 @@
             "Using ladder illegal",
             "都倒计时了，像点样吧！@全体成员",
             "虽有稿暴，不复挺者，𫐓使之然也。"
-        ];
-        // ================================================
-
-        // 初始化横幅
-        document.getElementById('customMarquee').innerText = MARQUEE_TEXT;
+        ]
+            },
+            en: {
+                htmlLang: 'en', title: 'Class Schedule Reminder',
+                weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datePattern: '{wd}, {mName} {d}, {y}',
+                clockLabel: 'Current Time: ',
+                todaySched: "Today's Subject: ", tomorrowSched: "Tomorrow's Subject: ",
+                subjects: ['Chinese', 'Math', 'English', 'Physics', 'Chemistry', 'Biology', 'None'],
+                practiceIn: 'Time until handwriting practice: ',
+                practiceEnd: 'Time until handwriting practice ends: ',
+                discussIn: 'Time until group discussion: ',
+                discussNow: 'Group discussion in progress...',
+                gaokaoIn: 'Time until the 2027 Gaokao: ', gaokaoDay: ' days',
+                gaokaoNow: 'The 2027 Gaokao has begun — good luck, everyone!',
+                mainNight: 'It\'s time to do what this hour is for.<br>Yesterday\'s discussion went really well.<br><span style="font-size:0.8em; color:#fff;">Friendly reminder:<br>Put away your math, physics and chemistry homework!</span>',
+                mainDone: 'Today\'s handwriting practice is done.<br>How well it went is up to your own conscience 🤔',
+                mainHurry: 'You know what to do at this hour.<br>I shouldn\'t have to say more!',
+                mainChinese: 'Chinese is worth 150 points too. It may not be as hard as math or physics, but it still matters ✍️',
+                btnNoPractice: 'I don\'t want to practice handwriting',
+                btnRebelText: 'This problem you\'re doing definitely won\'t be on the Gaokao.<br>But you\'ll still have to write on the Gaokao.',
+                btnStillNo: 'I still don\'t want to practice',
+                btnLifeText: 'Skip handwriting practice and your life is already falling apart!!',
+                btnAdmit: 'Teacher, I was wrong — I\'ll go practice right now',
+                btnGoodText: 'Admitting and fixing mistakes is the greatest good! Now start writing! ✍️',
+                quoteBtn: 'New Quote',
+                themeBtn: { dark: 'Dark Mode', light: 'Light Mode', green: 'Green Mode' },
+                marquee: 'Learning must never cease. Indigo comes from the indigo plant, yet is bluer than it; ice is made of water, yet is colder than water. Without accumulating small steps, one cannot reach a thousand miles; without accumulating small streams, one cannot form a great river. The thoroughbred leaps once but cannot cover ten paces; the old nag pulls for ten days, and succeeds through sheer persistence. — Xunzi, Exhortation to Learning',
+                quotes: [
+                    'Handwriting mirrors the person — character comes first.',
+                    'Wear out a thousand brushes, grind ten thousand inksticks, and only then does one character shine.',
+                    'When the heart is upright, the brush is upright.',
+                    'Calligraphy is the painting of the heart.',
+                    'Practice writing, practice the mind — a calm heart makes everything clear.',
+                    'Without small steps, no thousand-mile journey; without small streams, no great ocean.',
+                    'The mountain of books has a road, and diligence is the path.',
+                    'You can retake the Gaokao, but this moment of practice comes only once.'
+                ]
+            },
+            ja: {
+                htmlLang: 'ja', title: 'クラススケジュールリマインダー',
+                weekdays: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
+                months: null,
+                datePattern: '{y}年{m}月{d}日（{wd}）',
+                clockLabel: '現在時刻：',
+                todaySched: '今日の科目：', tomorrowSched: '明日の科目：',
+                subjects: ['国語', '数学', '英語', '物理', '化学', '生物', 'なし'],
+                practiceIn: '書き取り練習まであと：',
+                practiceEnd: '書き取り練習終了まであと：',
+                discussIn: 'グループ討論まであと：',
+                discussNow: 'グループ討論中...',
+                gaokaoIn: '2027年大学入試（高考）まであと：', gaokaoDay: '日',
+                gaokaoNow: '2027年の大学入試が始まりました、皆さん頑張ってください！',
+                mainNight: '今は何をすべき時間か分かっていますね。<br>昨日の討論はなかなか良かったですよ。<br><span style="font-size:0.8em; color:#fff;">ご注意：<br>数学・物理・化学の宿題はしまってください！</span>',
+                mainDone: '今日の書き取り練習は終了しました。<br>出来は自分自身の自覚次第です 🤔',
+                mainHurry: '今は何をすべき時間か、<br>いちいち言わせないでください！',
+                mainChinese: '国語も150点分あります。数学や物理ほど難しくはなくても、大事ですよ ✍️',
+                btnNoPractice: '書き取りなんてやりたくない',
+                btnRebelText: 'その問題は入試には絶対出ません。<br>でも入試では字を書かないといけませんよ。',
+                btnStillNo: 'やっぱりやりたくない',
+                btnLifeText: 'このままではあなたの人生はもう台無しです！！',
+                btnAdmit: '先生、間違っていました。今すぐ練習します',
+                btnGoodText: '過ちを改めるのは素晴らしい！さあ筆を取りましょう！✍️',
+                quoteBtn: '次の言葉',
+                themeBtn: { dark: 'ダークモード', light: 'ライトモード', green: '护眼グリーンモード' },
+                marquee: '学びて時に之を習う、亦た説ばしからずや。——『論語』／青、これ藍より取りて、藍より青し。——『荀子・勧学』：故に積まざれば小歩も以て千里に至るなく、積まざれば小流も以て江海を成すことなし。騐騏は一躍するも十歩なること能わず、駑馬も十駕すれば、功は舎らざるに在り。',
+                quotes: [
+                    '書は人なり、品を立つるを先とす。',
+                    '筆千管を秃にし、墨万錠を磨き、初めて一字の妙を得る。',
+                    '心正しければ筆もまた正し。',
+                    '書は心の画なり。',
+                    '書き取りの練習は心の修行、心静まれば自ずと涼やか。',
+                    '小さな一歩を積み重ねなければ、千里には届かない。',
+                    '書の山に道あり、勤を径とす；学の海に涯なし、苦を舟とす。'
+                ]
+            },
+            ko: {
+                htmlLang: 'ko', title: '반 일정 알림이',
+                weekdays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+                months: null,
+                datePattern: '{y}년 {m}월 {d}일 ({wd})',
+                clockLabel: '현재 시간: ',
+                todaySched: '오늘 과목: ', tomorrowSched: '내일 과목: ',
+                subjects: ['국어', '수학', '영어', '물리', '화학', '생물', '없음'],
+                practiceIn: '글씨 연습까지 남은 시간: ',
+                practiceEnd: '글씨 연습 종료까지 남은 시간: ',
+                discussIn: '모둠 토론까지 남은 시간: ',
+                discussNow: '모둠 토론 진행 중...',
+                gaokaoIn: '2027년 가오카오(대학입시)까지 남은 시간: ', gaokaoDay: '일',
+                gaokaoNow: '2027년 가오카오가 시작되었습니다, 모두 힘내세요!',
+                mainNight: '지금은 무엇을 해야 할 시간인지 아시죠?<br>어제 토론은 정말 좋았어요.<br><span style="font-size:0.8em; color:#fff;">알려드립니다:<br>수학·물리·화학 숙제는 치워주세요!</span>',
+                mainDone: '오늘 글씨 연습은 끝났습니다.<br>결과는 스스로의 자세에 달려 있어요 🤔',
+                mainHurry: '지금은 무엇을 해야 할 시간인지,<br>더 말하지 않아도 알죠!',
+                mainChinese: '국어도 150점이에요. 수학·물리만큼 어렵지 않아도 중요하답니다 ✍️',
+                btnNoPractice: '글씨 연습 하기 싫어요',
+                btnRebelText: '지금 푸는 그 문제는 시험에 안 나와요.<br>하지만 시험에서는 글씨를 써야 하잖아요.',
+                btnStillNo: '그래도 하기 싫어요',
+                btnLifeText: '이러다간 인생이 이미 망가지고 있어요!!',
+                btnAdmit: '선생님 잘못했어요, 바로 연습하러 갈게요',
+                btnGoodText: '잘못을 고치면 더없이 좋습니다! 어서 펜을 드세요! ✍️',
+                quoteBtn: '다른 명언',
+                themeBtn: { dark: '다크 모드', light: '라이트 모드', green: '눈보호 그린 모드' },
+                marquee: '배움은 멈출 수 없다. 쪽에서 뽑은 쪽빛은 쪽보다 더 푸르고, 물로 만든 얼음이 물보다 더 차갑다. — 『순자·권학』: 작은 걸음이 쌓이지 않으면 천 리에 이를 수 없고, 작은 물줄기가 쌓이지 않으면 큰 바다를 이룰 수 없다. 준마는 한 번 뛰어 열 걸음을 갈 수 없고, 둔한 말도 열흘을 걸으면 성공은 포기하지 않음에 있다.',
+                quotes: [
+                    '글씨는 곧 사람이다, 품성을 먼저 세워라.',
+                    '붓 천 자루를 닳게 하고 먹 만 개를 갈아야 한 글자의 묘미를 얻는다.',
+                    '마음이 바르면 붓도 바르다.',
+                    '글씨는 마음의 그림이다.',
+                    '글씨 연습은 마음 수련, 마음이 고요하면 절로 시원하다.',
+                    '작은 걸음이 쌓이지 않으면 천 리에 이를 수 없다.',
+                    '배움의 바다에는 끝이 없고, 노력만이 유일한 배다.'
+                ]
+            },
+            fr: {
+                htmlLang: 'fr', title: 'Rappel du programme de classe',
+                weekdays: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+                months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+                datePattern: '{wd} {d} {mName} {y}',
+                clockLabel: 'Heure actuelle : ',
+                todaySched: 'Matière du jour : ', tomorrowSched: 'Matière de demain : ',
+                subjects: ['Chinois', 'Maths', 'Anglais', 'Physique', 'Chimie', 'Biologie', 'Aucune'],
+                practiceIn: "Temps avant la pratique d'écriture : ",
+                practiceEnd: "Temps avant la fin de la pratique d'écriture : ",
+                discussIn: 'Temps avant la discussion de groupe : ',
+                discussNow: 'Discussion de groupe en cours...',
+                gaokaoIn: 'Temps avant le Gaokao 2027 : ', gaokaoDay: ' jours',
+                gaokaoNow: 'Le Gaokao 2027 a commencé, courage à tous !',
+                mainNight: "C'est l'heure de faire ce qu'il faut.<br>La discussion d'hier était très réussie.<br><span style=\"font-size:0.8em; color:#fff;\">Petit rappel :<br>Rangez vos devoirs de maths, physique et chimie !</span>",
+                mainDone: "La pratique d'écriture d'aujourd'hui est terminée.<br>Le résultat dépend de votre sérieux 🤔",
+                mainHurry: "Vous savez ce qu'il faut faire à cette heure-ci,<br>je ne devrais pas avoir à le répéter !",
+                mainChinese: 'Le chinois vaut aussi 150 points. Moins difficile que les maths ou la physique, mais tout aussi important ✍️',
+                btnNoPractice: "Je ne veux pas pratiquer l'écriture",
+                btnRebelText: "Cet exercice ne tombera jamais au Gaokao.<br>Mais vous devrez quand même écrire à l'examen.",
+                btnStillNo: 'Je ne veux toujours pas pratiquer',
+                btnLifeText: 'Sans pratique, votre vie est déjà en train de déraper !!',
+                btnAdmit: "Maître, j'ai compris, j'y vais tout de suite",
+                btnGoodText: "Reconnaître ses erreurs, c'est déjà la moitié du succès ! À vos stylos ! ✍️",
+                quoteBtn: 'Autre citation',
+                themeBtn: { dark: 'Mode sombre', light: 'Mode clair', green: 'Mode vert' },
+                marquee: "L'apprentissage ne doit jamais cesser. L'indigo, tiré de la plante indigo, est plus bleu que la plante ; la glace, née de l'eau, est plus froide que l'eau. Sans accumuler de petits pas, on ne peut parcourir mille lieues ; sans accumuler de petits ruisseaux, on ne peut former un grand fleuve. — Xunzi, Exhortation à l'étude",
+                quotes: [
+                    "L'écriture est le portrait de la personne : le caractère d'abord.",
+                    "Use mille pinceaux, broie dix mille pierres d'encre, et un seul caractère brillera.",
+                    'Quand le cœur est droit, le pinceau est droit.',
+                    'La calligraphie est la peinture du cœur.',
+                    "Pratiquer l'écriture, c'est pratiquer l'esprit : un cœur calme rend tout clair.",
+                    'Sans petits pas accumulés, point de voyage de mille lieues.',
+                    'Sur la montagne des livres, la diligence est le seul chemin.'
+                ]
+            },
+            es: {
+                htmlLang: 'es', title: 'Recordatorio de horario de clase',
+                weekdays: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+                months: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+                datePattern: '{wd}, {d} de {mName} de {y}',
+                clockLabel: 'Hora actual: ',
+                todaySched: 'Asignatura de hoy: ', tomorrowSched: 'Asignatura de mañana: ',
+                subjects: ['Chino', 'Matemáticas', 'Inglés', 'Física', 'Química', 'Biología', 'Ninguna'],
+                practiceIn: 'Tiempo para la práctica de caligrafía: ',
+                practiceEnd: 'Tiempo para el fin de la práctica de caligrafía: ',
+                discussIn: 'Tiempo para la discusión en grupo: ',
+                discussNow: 'Discusión en grupo en curso...',
+                gaokaoIn: 'Tiempo para el Gaokao 2027: ', gaokaoDay: ' días',
+                gaokaoNow: '¡El Gaokao 2027 ha comenzado, mucho ánimo a todos!',
+                mainNight: 'Ya saben qué toca hacer a esta hora.<br>La discusión de ayer estuvo muy bien.<br><span style="font-size:0.8em; color:#fff;">Recordatorio amistoso:<br>¡Guardad las tareas de mates, física y química!</span>',
+                mainDone: 'La práctica de caligrafía de hoy ha terminado.<br>El resultado depende de vuestra disciplina 🤔',
+                mainHurry: 'Ya saben qué toca hacer a esta hora,<br>¡no hace falta que lo repita!',
+                mainChinese: 'El chino también vale 150 puntos. No será tan difícil como las mates o la física, pero también es importante ✍️',
+                btnNoPractice: 'No quiero practicar caligrafía',
+                btnRebelText: 'Este ejercicio seguro que no sale en el Gaokao.<br>Pero en el Gaokao tendrás que escribir igualmente.',
+                btnStillNo: 'Sigo sin querer practicar',
+                btnLifeText: '¡¡Si no practicas, tu vida ya se está descarrilando!!',
+                btnAdmit: 'Maestro, me equivoqué, voy a practicar ahora mismo',
+                btnGoodText: '¡Corregir los errores es lo mejor! ¡A escribir! ✍️',
+                quoteBtn: 'Otra frase',
+                themeBtn: { dark: 'Modo oscuro', light: 'Modo claro', green: 'Modo verde' },
+                marquee: 'El aprendizaje nunca debe detenerse. El añil, extraído de la planta del añil, es más azul que la planta; el hielo, hecho de agua, es más frío que el agua. Sin acumular pequeños pasos no se pueden recorrer mil leguas; sin acumular pequeños arroyos no se puede formar un gran río. — Xunzi, Exhortación al estudio',
+                quotes: [
+                    'La letra es el retrato de la persona: primero el carácter.',
+                    'Desgasta mil pinceles, muele diez mil piedras de tinta, y un solo carácter brillará.',
+                    'Si el corazón es recto, el pincel también lo es.',
+                    'La caligrafía es la pintura del corazón.',
+                    'Practicar la letra es practicar la mente: un corazón en calma todo lo aclara.',
+                    'Sin pequeños pasos acumulados, no hay viaje de mil leguas.',
+                    'En la montaña de los libros, la diligencia es el único sendero.'
+                ]
+            },
+            ru: {
+                htmlLang: 'ru', title: 'Напоминание о расписании класса',
+                weekdays: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+                months: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+                datePattern: '{wd}, {d} {mName} {y} г.',
+                clockLabel: 'Текущее время: ',
+                todaySched: 'Предмет сегодня: ', tomorrowSched: 'Предмет завтра: ',
+                subjects: ['Китайский', 'Математика', 'Английский', 'Физика', 'Химия', 'Биология', 'Нет'],
+                practiceIn: 'До практики письма: ',
+                practiceEnd: 'До конца практики письма: ',
+                discussIn: 'До групповой дискуссии: ',
+                discussNow: 'Групповая дискуссия идёт...',
+                gaokaoIn: 'До гаокао 2027: ', gaokaoDay: ' дн.',
+                gaokaoNow: 'Гаокао-2027 начался, удачи всем!',
+                mainNight: 'Пора делать то, что положено в это время.<br>Вчерашняя дискуссия прошла очень хорошо.<br><span style="font-size:0.8em; color:#fff;">Напоминание:<br>Уберите домашку по математике, физике и химии!</span>',
+                mainDone: 'Сегодняшняя практика письма завершена.<br>Какова она — зависит от вашей совести 🤔',
+                mainHurry: 'Вы знаете, что пора делать,<br>мне не нужно повторять!',
+                mainChinese: 'Китайский тоже стоит 150 баллов. Он не так сложен, как математика или физика, но тоже важен ✍️',
+                btnNoPractice: 'Не хочу практиковать письмо',
+                btnRebelText: 'Эта задача точно не будет на экзамене.<br>Но на экзамене вам всё равно придётся писать.',
+                btnStillNo: 'Всё равно не хочу',
+                btnLifeText: 'Без практики ваша жизнь уже идёт наперекосяк!!',
+                btnAdmit: 'Учитель, я был неправ, уже иду практиковаться',
+                btnGoodText: 'Исправить ошибку — лучшее дело! Беритесь за ручку! ✍️',
+                quoteBtn: 'Ещё цитату',
+                themeBtn: { dark: 'Тёмный режим', light: 'Светлый режим', green: 'Зелёный режим' },
+                marquee: 'Учение никогда не должно прекращаться. Индиго, полученное из растения индиго, синее самого растения; лёд, рождённый водой, холоднее воды. Не накопив малых шагов, не пройти тысячи ли; не накопив малых ручьёв, не образовать великой реки. — Сюнь-цзы, Наставление об учении',
+                quotes: [
+                    'Почерк — зеркало человека: сначала характер.',
+                    'Источи тысячу кистей, разотри десять тысяч палочек туши — и лишь тогда засияет один иероглиф.',
+                    'Когда сердце прямо, прямо и перо.',
+                    'Каллиграфия — живопись сердца.',
+                    'Практика письма — практика ума: спокойное сердце делает всё ясным.',
+                    'Без малых шагов не пройти и тысячи ли.',
+                    'В океане знаний нет берегов — усердие служит единственным челноком.'
+                ]
+            },
+            de: {
+                htmlLang: 'de', title: 'Klassenplan-Erinnerung',
+                weekdays: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+                months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                datePattern: '{wd}, {d}. {mName} {y}',
+                clockLabel: 'Aktuelle Uhrzeit: ',
+                todaySched: 'Fach heute: ', tomorrowSched: 'Fach morgen: ',
+                subjects: ['Chinesisch', 'Mathe', 'Englisch', 'Physik', 'Chemie', 'Biologie', 'Kein'],
+                practiceIn: 'Zeit bis zur Schreibübung: ',
+                practiceEnd: 'Zeit bis zum Ende der Schreibübung: ',
+                discussIn: 'Zeit bis zur Gruppendiskussion: ',
+                discussNow: 'Gruppendiskussion läuft...',
+                gaokaoIn: 'Zeit bis zum Gaokao 2027: ', gaokaoDay: ' Tage',
+                gaokaoNow: 'Der Gaokao 2027 hat begonnen – viel Erfolg!',
+                mainNight: 'Ihr wisst, was um diese Zeit ansteht.<br>Die gestrige Diskussion war sehr gut.<br><span style="font-size:0.8em; color:#fff;">Kleiner Hinweis:<br>Räumt eure Mathe-, Physik- und Chemie-Hausaufgaben weg!</span>',
+                mainDone: 'Die heutige Schreibübung ist beendet.<br>Wie gut sie war, liegt an euch selbst 🤔',
+                mainHurry: 'Ihr wisst, was um diese Zeit ansteht,<br>ich muss es nicht extra sagen!',
+                mainChinese: 'Chinesisch zählt auch 150 Punkte. Nicht so schwer wie Mathe oder Physik, aber genauso wichtig ✍️',
+                btnNoPractice: 'Ich will keine Schreibübungen machen',
+                btnRebelText: 'Diese Aufgabe kommt sicher nicht im Gaokao vor.<br>Aber im Gaokao müsst ihr trotzdem schreiben.',
+                btnStillNo: 'Ich will trotzdem nicht',
+                btnLifeText: 'Ohne Übung läuft dein Leben schon aus dem Ruder!!',
+                btnAdmit: 'Lehrer, ich habe es verstanden, ich übe sofort',
+                btnGoodText: 'Fehler einzusehen ist das Beste! Ran an den Stift! ✍️',
+                quoteBtn: 'Neues Zitat',
+                themeBtn: { dark: 'Dunkelmodus', light: 'Hellmodus', green: 'Grünmodus' },
+                marquee: 'Lernen darf niemals aufhören. Das Indigoblau, aus der Indigopflanze gewonnen, ist blauer als die Pflanze; das Eis, aus Wasser entstanden, ist kälter als das Wasser. Wer keine kleinen Schritte sammelt, kommt nicht tausend Meilen weit; wer keine kleinen Bäche sammelt, bildet keinen großen Strom. — Xunzi, Ermunterung zum Lernen',
+                quotes: [
+                    'Die Handschrift ist der Spiegel des Menschen — der Charakter kommt zuerst.',
+                    'Tausend Pinsel abgenutzt, zehntausend Tintenstangen zerrieben — erst dann erstrahlt ein Zeichen.',
+                    'Ist das Herz aufrecht, ist auch der Stift aufrecht.',
+                    'Kalligrafie ist die Malerei des Herzens.',
+                    'Schreiben üben heißt den Geist üben — ein ruhiges Herz macht alles klar.',
+                    'Ohne kleine Schritte gibt es keine Reise von tausend Meilen.',
+                    'Im Gebirge der Bücher ist der Fleiß der einzige Pfad.'
+                ]
+            }
+        };
+        let currentLang = localStorage.getItem('pageLang') || 'zh';
+        if (!I18N[currentLang]) currentLang = 'zh';
+        const T = () => I18N[currentLang];
 
         // 按钮状态控制
-        let btnState = 0; 
+        let btnState = 0;
 
-        // 名言生成器逻辑
+        // 名言生成器逻辑（名言库随当前语言切换）
         let lastQuoteIndex = -1;
         function generateQuote() {
+            const list = T().quotes;
             let index;
             do {
-                index = Math.floor(Math.random() * quotes.length);
-            } while (index === lastQuoteIndex && quotes.length > 1);
-            
+                index = Math.floor(Math.random() * list.length);
+            } while (index === lastQuoteIndex && list.length > 1);
             lastQuoteIndex = index;
-            document.getElementById('quoteDisplay').innerText = `“${quotes[index]}”`;
+            document.getElementById('quoteDisplay').innerText = `“${list[index]}”`;
         }
-        generateQuote();
-        setInterval(generateQuote, 10000);
+        // 带淡出淡入动画地切换名言
+        function animateQuoteChange() {
+            const qd = document.getElementById('quoteDisplay');
+            qd.classList.add('quote-out');
+            setTimeout(() => {
+                generateQuote();
+                qd.classList.remove('quote-out');
+            }, 250);
+        }
+        // 点击“换一句”按钮：按钮弹跳旋转动画 + 名言淡出淡入
+        window.quoteBtnClick = function (btn) {
+            btn.classList.remove('spinning');
+            void btn.offsetWidth; // 重置动画，保证连点也能播放
+            btn.classList.add('spinning');
+            animateQuoteChange();
+        };
 
+        // 按当前语言格式化日期
+        function buildDateStr(now) {
+            const L = T();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            const wd = L.weekdays[now.getDay()];
+            const mName = L.months ? L.months[now.getMonth()] : '';
+            return L.datePattern
+                .replace('{y}', y).replace('{m}', m).replace('{d}', d)
+                .replace('{wd}', wd).replace('{mName}', mName);
+        }
         // 更新实时日期和时间的函数
         function updateClock() {
             const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const weekDay = weekDays[now.getDay()];
-            
             let h = String(now.getHours()).padStart(2, '0');
             let m = String(now.getMinutes()).padStart(2, '0');
             let s = String(now.getSeconds()).padStart(2, '0');
-
-            document.getElementById('clockDisplay').innerText = `📅 ${year}年${month}月${day}日 ${weekDay} | ⏰ 当前时间：${h}:${m}:${s}`;
+            document.getElementById('clockDisplay').innerText = `📅 ${buildDateStr(now)} | ⏰ ${T().clockLabel}${h}:${m}:${s}`;
         }
 
         function checkTime() {
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
-            
+            const L = T();
+
             const mainDisplay = document.getElementById('mainDisplay');
             const countdownDisplay = document.getElementById('countdownDisplay');
             const discussCountdownDisplay = document.getElementById('discussCountdownDisplay');
             const scheduleDisplay = document.getElementById('scheduleDisplay');
             const btnContainer = document.getElementById('btnContainer');
 
-            // 1. 始终显示科目表
+            // 1. 始终显示科目表（随语言翻译）
             const today = now.getDay();
             const tomorrow = (today + 1) % 7;
-            scheduleDisplay.innerHTML = `今日科目：<span>${scheduleMap[today]}</span> | 明日科目：<span>${scheduleMap[tomorrow]}</span>`;
+            scheduleDisplay.innerHTML = `${L.todaySched}<span>${L.subjects[today]}</span> | ${L.tomorrowSched}<span>${L.subjects[tomorrow]}</span>`;
 
             // 2. 始终显示距离小组讨论的倒计时（带颜色切换）
             let discussTarget = new Date(now);
             discussTarget.setHours(22, 30, 0, 0);
             let discussDiff = discussTarget - now;
-            
             if (discussDiff > 0) {
                 discussCountdownDisplay.classList.remove('active'); // 移除红色
-                discussCountdownDisplay.innerHTML = `<span class="heartbeat-anim">⏳</span> 距离小组讨论还有：${formatTime(discussDiff)}`;
+                discussCountdownDisplay.innerHTML = `<span class="heartbeat-anim">⏳</span> ${L.discussIn}${formatTime(discussDiff)}`;
             } else {
                 discussCountdownDisplay.classList.add('active'); // 激活红色
-                discussCountdownDisplay.innerHTML = `<span class="heartbeat-anim">🔥</span> 小组讨论进行中...`;
+                discussCountdownDisplay.innerHTML = `<span class="heartbeat-anim">🔥</span> ${L.discussNow}`;
+            }
+
+            // 2.5 始终显示距离2027年高考（6月7日09:00开考）的倒计时
+            const gaokaoDiff = GAOKAO_TARGET - now;
+            const gaokaoDisplay = document.getElementById('gaokaoCountdownDisplay');
+            if (gaokaoDiff > 0) {
+                const gkTotalSec = Math.floor(gaokaoDiff / 1000);
+                const gkDays = Math.floor(gkTotalSec / 86400);
+                const gh = String(Math.floor((gkTotalSec % 86400) / 3600)).padStart(2, '0');
+                const gm = String(Math.floor((gkTotalSec % 3600) / 60)).padStart(2, '0');
+                const gs = String(gkTotalSec % 60).padStart(2, '0');
+                gaokaoDisplay.innerHTML = `<span class="heartbeat-anim">🎓</span> ${L.gaokaoIn}${gkDays}${L.gaokaoDay} ${gh}:${gm}:${gs}`;
+            } else {
+                gaokaoDisplay.innerHTML = `<span class="heartbeat-anim">🔥</span> ${L.gaokaoNow}`;
             }
 
             // 3. 根据时间段切换主提示
             mainDisplay.innerHTML = '';
             countdownDisplay.innerHTML = '';
-            btnContainer.innerHTML = ''; 
+            btnContainer.innerHTML = '';
 
             // === 22:30 之后：小组讨论模式 ===
             if (hours > 22 || (hours === 22 && minutes >= 30)) {
                 mainDisplay.className = 'main-text';
-                mainDisplay.innerHTML = '什么时间该做什么事了哦，<br>昨天的讨论效果还是不错的哦。<br><span style="font-size:0.8em; color:#fff;">友情提示：<br>把你们的数理化作业收起来哦！</span>';
-            } 
+                mainDisplay.innerHTML = L.mainNight;
+            }
             // === 19:00 - 22:29：练字结束灵魂拷问 ===
             else if (hours >= 19) {
                 mainDisplay.className = 'main-text';
-                mainDisplay.style.color = '#95a5a6'; 
+                mainDisplay.style.color = '#95a5a6';
                 mainDisplay.style.textShadow = '3px 3px 0 #2c3e50, 6px 6px 0 rgba(0,0,0,0.3)';
-                mainDisplay.innerHTML = '今天练字已经完成，<br>具体怎么样还是要靠自觉啊 🤔';
-            } 
+                mainDisplay.innerHTML = L.mainDone;
+            }
             // === 18:50 - 19:00：练字大字报 + 按钮触发区 ===
             else if (hours === 18 && minutes >= 50) {
                 mainDisplay.className = 'main-text';
-                mainDisplay.style.color = '#f1c40f'; 
+                mainDisplay.style.color = '#f1c40f';
                 mainDisplay.style.textShadow = '3px 3px 0 #e74c3c, 6px 6px 0 rgba(0,0,0,0.3)';
-                mainDisplay.innerHTML = '什么时间该做什么事了，<br>不需要我多说了吧！';
-                
+                mainDisplay.innerHTML = L.mainHurry;
+
                 let practiceTarget = new Date(now);
-                practiceTarget.setHours(19, 0, 0, 0); 
+                practiceTarget.setHours(19, 0, 0, 0);
                 let practiceDiff = practiceTarget - now;
                 if (practiceDiff > 0) {
                     countdownDisplay.className = 'countdown practice';
-                    countdownDisplay.innerHTML = `<span class="heartbeat-anim">⏱️</span> 距离练字结束还有：${formatTime(practiceDiff)}`;
+                    countdownDisplay.innerHTML = `<span class="heartbeat-anim">⏱️</span> ${L.practiceEnd}${formatTime(practiceDiff)}`;
                 }
-                
                 renderButtons(btnContainer);
-            } 
+            }
             // === 18:50 之前：练字提示模式 ===
             else {
                 mainDisplay.className = 'sub-text';
-                mainDisplay.innerHTML = '语文也是150分哦，虽然不像数学物理那么难学，但也是重要的哦 ✍️';
-                
+                mainDisplay.innerHTML = L.mainChinese;
+
                 let practiceTarget = new Date(now);
                 practiceTarget.setHours(18, 50, 0, 0);
                 let practiceDiff = practiceTarget - now;
                 if (practiceDiff > 0) {
                     countdownDisplay.className = 'countdown practice';
-                    countdownDisplay.innerHTML = `<span class="heartbeat-anim">⏳</span> 距离练字还有：${formatTime(practiceDiff)}`;
+                    countdownDisplay.innerHTML = `<span class="heartbeat-anim">⏳</span> ${L.practiceIn}${formatTime(practiceDiff)}`;
                 }
             }
         }
 
-        // 渲染按钮的独立函数
+        // 渲染按钮的独立函数（文案随语言翻译）
         function renderButtons(container) {
+            const L = T();
             if (btnState === 0) {
-                container.innerHTML = `<button class="btn btn-rebel" onclick="changeBtnState(1)">我不想练字</button>`;
+                container.innerHTML = `<button class="btn btn-rebel" onclick="changeBtnState(1)">${L.btnNoPractice}</button>`;
             } else if (btnState === 1) {
                 container.innerHTML = `
-                    <div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#e67e22;">你做的这道题，高考肯定不考。<br>但是你高考总是要写字的啊。</div>
-                    <button class="btn btn-stubborn" onclick="changeBtnState(2)">我还是不想练字</button>
+                    <div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#e67e22;">${L.btnRebelText}</div>
+                    <button class="btn btn-stubborn" onclick="changeBtnState(2)">${L.btnStillNo}</button>
                 `;
             } else if (btnState === 2) {
                 container.innerHTML = `
-                    <div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#c0392b; font-weight:bold;">再不练字你的人生已经掉链子了！！</div>
-                    <button class="btn btn-admit" onclick="changeBtnState(3)">恩师我知道错了，我这就去练字</button>
+                    <div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#c0392b; font-weight:bold;">${L.btnLifeText}</div>
+                    <button class="btn btn-admit" onclick="changeBtnState(3)">${L.btnAdmit}</button>
                 `;
             } else if (btnState === 3) {
-                container.innerHTML = `<div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#2ecc71;">知错能改，善莫大焉！赶紧动笔吧！✍️</div>`;
+                container.innerHTML = `<div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#2ecc71;">${L.btnGoodText}</div>`;
             }
         }
 
         // 切换按钮状态
-        window.changeBtnState = function(state) {
+        window.changeBtnState = function (state) {
             btnState = state;
-            checkTime(); 
+            checkTime();
         }
 
         // 格式化时间函数
@@ -309,11 +698,60 @@
             return `${h}:${m}:${s}`;
         }
 
+        // ============ 主题切换逻辑 ============
+        const themeList = ['dark', 'light', 'green'];
+        const themeIcons = { dark: '🌙', light: '☀️', green: '🌿' };
+        let currentTheme = localStorage.getItem('pageTheme') || 'dark';
+        function applyTheme(theme) {
+            document.body.classList.remove('theme-light', 'theme-green');
+            if (theme === 'light') document.body.classList.add('theme-light');
+            if (theme === 'green') document.body.classList.add('theme-green');
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) btn.innerText = `${themeIcons[theme]} ${T().themeBtn[theme]}`;
+            localStorage.setItem('pageTheme', theme);
+        }
+        window.toggleTheme = function () {
+            const idx = themeList.indexOf(currentTheme);
+            currentTheme = themeList[(idx + 1) % themeList.length];
+            applyTheme(currentTheme);
+        }
+
+        // ============ 语言切换逻辑 ============
+        function setLanguage(lang) {
+            if (!I18N[lang]) return;
+            currentLang = lang;
+            localStorage.setItem('pageLang', lang);
+            const L = T();
+            document.documentElement.lang = L.htmlLang;
+            document.title = L.title;
+            document.getElementById('customMarquee').innerText = L.marquee;
+            document.getElementById('quoteBtn').innerText = L.quoteBtn;
+            const sel = document.getElementById('langSelect');
+            if (sel) sel.value = lang;
+            lastQuoteIndex = -1;
+            generateQuote();      // 立即换成当前语言的名言
+            applyTheme(currentTheme); // 刷新主题按钮文字
+            checkTime();          // 刷新倒计时与主提示
+            updateClock();        // 刷新日期时间
+        }
+        window.setLanguage = setLanguage;
+
         // 页面加载时立即执行一次
-        checkTime();
-        updateClock();
+        (function init() {
+            const L = T();
+            document.documentElement.lang = L.htmlLang;
+            document.title = L.title;
+            document.getElementById('customMarquee').innerText = L.marquee;
+            document.getElementById('quoteBtn').innerText = L.quoteBtn;
+            document.getElementById('langSelect').value = currentLang;
+            generateQuote();
+            applyTheme(currentTheme);
+            checkTime();
+            updateClock();
+        })();
         setInterval(checkTime, 1000);
         setInterval(updateClock, 1000);
+        setInterval(animateQuoteChange, 10000);
     </script>
 </body>
 </html>
