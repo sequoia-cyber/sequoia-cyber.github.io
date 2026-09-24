@@ -2,37 +2,51 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>班级日程提醒</title>
     <style>
         /* 全局样式：彻底抛弃宋体，统一使用现代无衬线字体 */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+            margin: 0; padding: 0; width: 100vw; height: 100vh;
             background-color: #111; color: #fff;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
             overflow: hidden; display: flex; flex-direction: column;
+            transition: background-color 0.5s ease, color 0.5s ease;
             justify-content: center; align-items: center;
+        }
+        body {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        img, video, svg {
+            max-width: 100%;
+            height: auto;
         }
         /* 顶部滚动横幅样式 */
         .marquee-container {
-            position: absolute; top: 0; width: 100%;
-            background-color: #e74c3c; padding: 15px 0;
-            font-size: 24px; font-weight: bold;
+            position: absolute; top: 0; left: 0; width: 100%;
+            background-color: #e74c3c; padding: 10px 0;
+            font-size: 18px; font-weight: 400;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 10;
         }
         marquee { color: #fff; }
         /* 主内容区域样式 */
-        .content-box { text-align: center; padding: 20px; max-width: 90%; }
+        .content-box { text-align: center; padding: 15px 25px; max-width: 90%; max-height: 85vh; overflow: auto; display: flex; flex-direction: column;
+            transition: background-color 0.5s ease, color 0.5s ease; justify-content: center; }
         /* 大字报核心文字样式 */
         .main-text {
-            font-size: 5vw; font-weight: 900; line-height: 1.3;
+            font-size: 4vw; font-weight: 300; line-height: 1.2; word-wrap: break-word;
             color: #f1c40f;
             text-shadow: 3px 3px 0 #e74c3c, 6px 6px 0 rgba(0,0,0,0.3);
             animation: pulse 2s infinite;
         }
         /* 倒计时通用样式：现代化字体 + 等宽数字 */
         .countdown {
-            font-size: 3vw; font-weight: bold; margin-top: 20px;
+            font-size: 2.4vw; font-weight: 400; margin-top: 12px;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
             font-variant-numeric: tabular-nums; letter-spacing: 1px;
             transition: color 0.5s ease; /* 颜色切换增加平滑过渡 */
@@ -50,50 +64,52 @@
         }
         .heartbeat-anim { display: inline-block; animation: heartbeat 1s infinite; }
         /* 提示文字与按钮样式 */
-        .sub-text { font-size: 3vw; color: #bdc3c7; margin-top: 30px; line-height: 1.6; }
+        .sub-text { font-size: 1.8vw; color: #bdc3c7; margin-top: 15px; line-height: 1.5; font-weight: 300; }
         .btn-group { margin-top: 40px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
         .btn {
-            padding: 15px 30px; font-size: 2vw; border: none; border-radius: 50px;
-            cursor: pointer; font-weight: bold; transition: all 0.3s;
+            font-weight: 400;
+            padding: 10px 22px; font-size: 1.6vw; border: none; border-radius: 50px;
+            cursor: pointer; font-weight: 500; transition: all 0.3s;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
         }
-        .btn:hover { transform: scale(1.05); opacity: 0.9; }
+        .btn:hover { transform: scale(1.03); opacity: 0.92; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .btn-rebel { background-color: #e67e22; color: #fff; }
         .btn-stubborn { background-color: #c0392b; color: #fff; }
         .btn-admit { background-color: #27ae60; color: #fff; }
         /* 底部信息栏（包含科目表、时钟与名言） */
         .bottom-bar {
-            position: absolute; bottom: 30px;
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            position: absolute; bottom: 10px;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
         }
         /* 科目表样式：现代化字体 */
         .schedule {
-            font-size: 2.5vw; line-height: 1.8; color: #ecf0f1;
+            font-size: 1.8vw; line-height: 1.5; color: #ecf0f1;
             background: rgba(255,255,255,0.1); padding: 15px 40px; border-radius: 10px;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
-            font-weight: 500; letter-spacing: 1px;
+            font-weight: 400; letter-spacing: 1px;
         }
-        .schedule span { color: #f1c40f; font-weight: bold; }
+        .schedule span { color: #f1c40f; font-weight: 500; }
         /* 自动更新日期时间样式：现代化字体 + 等宽数字 */
         .realtime-clock {
-            font-size: 2vw; color: #95a5a6;
+            font-size: 1.4vw; color: #95a5a6;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
-            font-variant-numeric: tabular-nums; letter-spacing: 1px;
+            font-variant-numeric: tabular-nums; letter-spacing: 0.5px;
         }
         /* 名言生成器样式：现代化字体，去掉老旧斜体 */
         .quote-box {
             display: flex; align-items: center; gap: 15px;
-            font-size: 1.8vw; color: #f39c12;
-            background: rgba(243, 156, 18, 0.1); padding: 10px 25px; border-radius: 20px;
+            font-size: 1.3vw; color: #f39c12;
+            background: rgba(243, 156, 18, 0.08); padding: 10px 22px; border-radius: 12px;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
-            font-weight: 500;
+            font-weight: 300;
+            border: 1px solid rgba(243, 156, 18, 0.15);
         }
         #quoteDisplay { display: inline-block; transition: opacity 0.25s ease, transform 0.25s ease; }
         #quoteDisplay.quote-out { opacity: 0; transform: translateY(10px); }
         .quote-btn {
-            padding: 8px 15px; font-size: 1.5vw; border: none; border-radius: 15px;
-            background-color: #f39c12; color: #111; cursor: pointer; font-weight: bold;
-            transition: all 0.3s;
+            padding: 7px 18px; font-size: 1.4vw; border: 1px solid rgba(243,156,18,0.3); border-radius: 12px;
+            background-color: transparent; color: #f39c12; cursor: pointer; font-weight: 400;
+            transition: all 0.3s ease;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
         }
         .quote-btn:hover { background-color: #e67e22; transform: scale(1.05); }
@@ -114,31 +130,250 @@
         }
         /* ============ 顶部控制区：语言切换 + 主题切换 ============ */
         .top-controls {
-            position: absolute; top: 70px; right: 20px; z-index: 20;
+            position: absolute; top: 50px; right: 20px; z-index: 25;
             display: flex; gap: 12px; align-items: center;
         }
         .theme-btn {
-            padding: 10px 22px; font-size: 1.5vw; border: none; border-radius: 30px;
-            cursor: pointer; font-weight: bold; transition: all 0.3s;
-            background-color: #34495e; color: #fff;
+            padding: 8px 20px; font-size: 1.4vw; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+            cursor: pointer; font-weight: 400; transition: all 0.3s ease;
+            background-color: rgba(52, 73, 94, 0.6); color: #fff;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
             box-shadow: 0 2px 8px rgba(0,0,0,0.35);
         }
-        .theme-btn:hover { transform: scale(1.08); opacity: 0.92; }
+        .theme-btn:hover { transform: scale(1.04); opacity: 0.95; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .lang-select {
-            padding: 10px 18px; font-size: 1.5vw; border: none; border-radius: 30px;
-            cursor: pointer; font-weight: bold; transition: all 0.3s;
-            background-color: #34495e; color: #fff;
+            padding: 8px 16px; font-size: 1.4vw; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+            cursor: pointer; font-weight: 400; transition: all 0.3s ease;
+            background-color: rgba(52, 73, 94, 0.6); color: #fff;
             font-family: "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", system-ui, Arial, sans-serif;
             box-shadow: 0 2px 8px rgba(0,0,0,0.35); outline: none;
         }
-        .lang-select:hover { transform: scale(1.05); opacity: 0.92; }
-        /* 高考倒计时配色（默认深色主题） */
+        .lang-select:hover { transform: scale(1.03); opacity: 0.95; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        /* ============ 自定义下拉菜单样式 ============ */
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-toggle {
+            padding: 8px 20px;
+            font-size: 1.4vw;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: rgba(52, 73, 94, 0.6);
+            color: #fff;
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .dropdown-toggle:hover {
+            transform: scale(1.04);
+            opacity: 0.95;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .dropdown-toggle:active {
+            transform: scale(0.98);
+        }
+        .dropdown-arrow {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        .dropdown-toggle.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 140px;
+            background: #16213e;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .custom-dropdown.active .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .dropdown-item {
+            padding: 10px 18px;
+            font-size: 1.3vw;
+            color: #bdc3c7;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-family: inherit;
+        }
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .dropdown-item:hover {
+            background: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+            padding-left: 24px;
+        }
+        .dropdown-item:active {
+            background: rgba(243, 156, 18, 0.2);
+        }
+        /* 浅色主题下拉菜单适配 */
+        body.theme-light .dropdown-toggle {
+            background-color: rgba(44, 62, 80, 0.5);
+            border-color: rgba(0,0,0,0.1);
+            color: #2c3e50;
+        }
+        body.theme-light .dropdown-menu {
+            background: #f8f9fa;
+            border-color: rgba(0,0,0,0.08);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        body.theme-light .dropdown-item {
+            color: #555;
+            border-bottom-color: rgba(0,0,0,0.05);
+        }
+        body.theme-light .dropdown-item:hover {
+            background: rgba(243, 156, 18, 0.1);
+            color: #d35400;
+        }
+        /* 护眼绿主题下拉菜单适配 */
+        body.theme-green .dropdown-toggle {
+            background-color: rgba(46, 125, 50, 0.5);
+            border-color: rgba(0,0,0,0.1);
+            color: #1e4d2b;
+        }
+        body.theme-green .dropdown-menu {
+            background: #d4edda;
+            border-color: rgba(0,0,0,0.08);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        body.theme-green .dropdown-item {
+            color: #2f6b4a;
+            border-bottom-color: rgba(0,0,0,0.05);
+        }
+        body.theme-green .dropdown-item:hover {
+            background: rgba(46, 125, 50, 0.15);
+            color: #2e7d32;
+        }
+        /* 顶部控制区间距调整 */
+        .top-controls {
+            gap: 10px;
+        }
+        
+        /* ============ 自定义比例调整器样式 ============ */
+        .scale-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            font-size: 1.2vw;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background-color: rgba(52, 73, 94, 0.6);
+            color: #fff;
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .scale-control:hover {
+            transform: scale(1.04);
+            opacity: 0.95;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .scale-control label {
+            font-weight: 400;
+            white-space: nowrap;
+            font-size: 1.2vw;
+        }
+        .scale-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            transition: all 0.2s;
+        }
+        .scale-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #f39c12;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .scale-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #e67e22;
+        }
+        .scale-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #f39c12;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .scale-value {
+            min-width: 38px;
+            text-align: center;
+            font-weight: 400;
+            font-size: 1.2vw;
+            color: #f39c12;
+        }
+        /* 浅色主题比例调整器适配 */
+        body.theme-light .scale-control {
+            background-color: rgba(44, 62, 80, 0.5);
+            border-color: rgba(0,0,0,0.1);
+            color: #2c3e50;
+        }
+        body.theme-light .scale-slider {
+            background: rgba(0,0,0,0.1);
+        }
+        body.theme-light .scale-value {
+            color: #e67e22;
+        }
+        /* 护眼绿主题比例调整器适配 */
+        body.theme-green .scale-control {
+            background-color: rgba(46, 125, 50, 0.5);
+            border-color: rgba(0,0,0,0.1);
+            color: #1e4d2b;
+        }
+        body.theme-green .scale-slider {
+            background: rgba(0,0,0,0.08);
+        }
+        body.theme-green .scale-value {
+            color: #2e7d32;
+        }
+
+/* 高考倒计时配色（默认深色主题） */
         .countdown.gaokao { color: #ffb84d; }
         /* ============ 日间（浅色）主题 ============ */
         body.theme-light { background-color: #f5f6fa; color: #2c3e50; }
         body.theme-light .sub-text { color: #7f8c8d; }
-        body.theme-light .schedule { background: rgba(0,0,0,0.06); color: #2c3e50; }
+        body.theme-light .schedule { background: rgba(0,0,0,0.03); color: #2c3e50; border-color: rgba(0,0,0,0.06); }
         body.theme-light .schedule span { color: #e67e22; }
         body.theme-light .realtime-clock { color: #7f8c8d; }
         body.theme-light .quote-box { background: rgba(243,156,18,0.15); color: #d35400; }
@@ -147,11 +382,11 @@
             text-shadow: 3px 3px 0 rgba(231,76,60,0.35), 6px 6px 0 rgba(0,0,0,0.08) !important;
         }
         body.theme-light .countdown.gaokao { color: #e67e22; }
-        body.theme-light .theme-btn, body.theme-light .lang-select { background-color: #2c3e50; }
+        body.theme-light .theme-btn, body.theme-light .lang-select { background-color: rgba(44, 62, 80, 0.5); border-color: rgba(0,0,0,0.1); }
         /* ============ 护眼绿主题 ============ */
         body.theme-green { background-color: #c7edcc; color: #1e4d2b; }
         body.theme-green .sub-text { color: #3a6b4a; }
-        body.theme-green .schedule { background: rgba(0,0,0,0.08); color: #1e4d2b; }
+        body.theme-green .schedule { background: rgba(0,0,0,0.04); color: #1e4d2b; border-color: rgba(0,0,0,0.06); }
         body.theme-green .schedule span { color: #c0392b; }
         body.theme-green .realtime-clock { color: #2f6b3f; }
         body.theme-green .quote-box { background: rgba(46,125,50,0.12); color: #2e7d32; }
@@ -160,13 +395,235 @@
             text-shadow: 3px 3px 0 rgba(255,152,0,0.45), 6px 6px 0 rgba(0,0,0,0.10) !important;
         }
         body.theme-green .countdown.gaokao { color: #d9480f; }
-        body.theme-green .theme-btn, body.theme-green .lang-select { background-color: #2e7d32; }
+        body.theme-green .theme-btn, body.theme-green .lang-select { background-color: rgba(46, 125, 50, 0.5); border-color: rgba(0,0,0,0.1); }
+        /* 导航菜单主题适配 */
+        body.theme-light .nav-menu ul { background-color: rgba(44, 62, 80, 0.9); }
+        body.theme-green .nav-menu ul { background-color: rgba(46, 125, 50, 0.9); }
+
+
+
+        /* ============ 汉堡菜单按钮 ============ */
+        .hamburger-btn {
+            position: absolute; top: 55px; left: 25px; z-index: 30;
+            background: none; border: none; cursor: pointer;
+            padding: 8px; display: flex; flex-direction: column;
+            gap: 5px; transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hamburger-btn:hover { opacity: 0.8; }
+        .hamburger-btn span {
+            display: block; width: 26px; height: 2px;
+            background-color: #ecf0f1; border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center center;
+        }
+        body.theme-light .hamburger-btn span { background-color: #2c3e50; }
+        body.theme-green .hamburger-btn span { background-color: #1e4d2b; }
+        .hamburger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger-btn.active span:nth-child(2) {
+            opacity: 0; transform: scaleX(0);
+        }
+        .hamburger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+        /* 菜单遮罩层 */
+        .menu-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45); z-index: 25;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+        .menu-overlay.active { opacity: 1; pointer-events: auto; }
+        /* 侧边菜单面板 */
+        .menu-panel {
+            position: fixed; top: 0; left: 0; width: 260px; height: 100%;
+            background: #16213e; z-index: 26;
+            transform: translateX(-100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 70px 28px 30px;
+            display: flex; flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+        }
+        body.theme-light .menu-panel { background: #f8f9fa; box-shadow: 4px 0 20px rgba(0,0,0,0.08); }
+        body.theme-green .menu-panel { background: #d4edda; }
+        .menu-panel.active { transform: translateX(0); }
+        .menu-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 35px; padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        body.theme-light .menu-header { border-bottom-color: rgba(0,0,0,0.1); }
+        body.theme-green .menu-header { border-bottom-color: rgba(0,0,0,0.15); }
+        .menu-title {
+            font-size: 1.2rem; font-weight: 300; color: #ecf0f1;
+            letter-spacing: 2px;
+        }
+        body.theme-light .menu-title { color: #2c3e50; }
+        body.theme-green .menu-title { color: #1e4d2b; }
+        .menu-close {
+            background: none; border: none; color: #ecf0f1;
+            font-size: 1.4rem; cursor: pointer; padding: 4px 8px;
+            transition: all 0.2s; border-radius: 4px;
+        }
+        body.theme-light .menu-close { color: #2c3e50; }
+        body.theme-green .menu-close { color: #1e4d2b; }
+        .menu-close:hover { background: rgba(255,255,255,0.1); }
+        body.theme-light .menu-close:hover { background: rgba(0,0,0,0.06); }
+        /* 菜单导航项 */
+        .menu-nav { display: flex; flex-direction: column; gap: 6px; }
+        .menu-link {
+            text-decoration: none; color: #bdc3c7;
+            font-size: 1.05rem; font-weight: 300;
+            padding: 14px 18px; border-radius: 8px;
+            transition: all 0.25s ease;
+            display: flex; align-items: center; gap: 12px;
+            letter-spacing: 0.5px;
+        }
+        body.theme-light .menu-link { color: #555; }
+        body.theme-green .menu-link { color: #2f6b4a; }
+        .menu-link:hover {
+            background: rgba(243, 156, 18, 0.1);
+            color: #f39c12; transform: translateX(4px);
+        }
+        .menu-link.active {
+            background: rgba(243, 156, 18, 0.15);
+            color: #f39c12; font-weight: 400;
+        }
+        .menu-icon { font-size: 1.1rem; width: 22px; text-align: center; opacity: 0.7; }
+        .menu-link.active .menu-icon { opacity: 1; }
+        /* 菜单项进入动画 */
+        .menu-panel .menu-link {
+            opacity: 0; transform: translateX(-20px);
+        }
+        .menu-panel.active .menu-link {
+            opacity: 1; transform: translateX(0);
+        }
+        .menu-panel.active .menu-link:nth-child(1) { transition-delay: 0.05s; }
+        .menu-panel.active .menu-link:nth-child(2) { transition-delay: 0.1s; }
+        .menu-panel.active .menu-link:nth-child(3) { transition-delay: 0.15s; }
+        .menu-panel.active .menu-link:nth-child(4) { transition-delay: 0.2s; }
+
+
+        /* ============ 页面切换动画 ============ */
+        .page-section {
+            display: none; width: 100%; height: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(8px);
+            overflow-y: auto;
+        }
+        .page-section.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* 页面切换时的淡入动画 */
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page-section.page-enter {
+            animation: pageFadeIn 0.4s ease forwards;
+        }
+        .page-section.active { display: flex; flex-direction: column; }
+    /* ========== 希沃白板Chrome浏览器适配 ========== */
+        /* 确保在1920x1080分辨率下完美显示 */
+        @media screen and (max-width: 1920px) {
+            .main-text { font-size: 3.4vw; }
+            .countdown { font-size: 2vw; }
+            .sub-text { font-size: 1.8vw; }
+            .schedule { font-size: 1.6vw; }
+            .realtime-clock { font-size: 1.4vw; }
+            .quote-box { font-size: 1.3vw; }
+            .nav-menu a { font-size: 1.2vw; }
+            .btn {
+            font-weight: 400; font-size: 1.5vw; }
+        }
+        /* 适配1366x768等较小分辨率 */
+        @media screen and (max-width: 1366px) {
+            .main-text { font-size: 2.8vw; }
+            .countdown { font-size: 1.8vw; }
+            .sub-text { font-size: 1.5vw; }
+            .schedule { font-size: 1.4vw; }
+            .realtime-clock { font-size: 1.2vw; }
+            .quote-box { font-size: 1.1vw; }
+            .nav-menu a { font-size: 1vw; }
+            .btn {
+            font-weight: 400; font-size: 1.3vw; padding: 8px 18px; }
+        }
+                /* 小屏幕适配 */
+        @media screen and (max-width: 768px) {
+            .main-text { font-size: 5vw !important; }
+            .countdown { font-size: 3vw !important; }
+            .sub-text { font-size: 2.5vw !important; }
+            .schedule { font-size: 2.5vw !important; padding: 10px 20px; }
+            .realtime-clock { font-size: 2vw !important; }
+            .quote-box { font-size: 2.2vw !important; padding: 8px 15px; }
+            .btn { font-size: 3vw !important; padding: 8px 16px; }
+            .hamburger-btn { top: 15px; left: 15px; }
+            .top-controls { top: 15px; right: 15px; }
+            .menu-panel { width: 220px; }
+            .marquee-container { font-size: 14px; padding: 8px 0; }
+        }
+        /* 希沃浏览器特殊修复 */
+        input, textarea, select, button {
+            font-size: inherit;
+            font-family: inherit;
+        }
+        textarea {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        /* Ensure essay content area scrolls */
+        #essayResult {
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        /* 防止flex布局中子元素溢出 */
+        .page-section {
+            width: 100%;
+            height: 100%;
+        }
+        /* 确保marquee内容不溢出容器 */
+        marquee {
+            display: inline-block;
+            white-space: nowrap;
+        }
+        /* 页面加载动画 */
+        body {
+            animation: bodyFadeIn 0.6s ease-out;
+        }
+        @keyframes bodyFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
     <!-- 顶部控制区：语言切换 + 主题切换 -->
     <div class="top-controls">
-        <select id="langSelect" class="lang-select" onchange="setLanguage(this.value)">
+        <div class="custom-dropdown lang-dropdown" id="langDropdown">
+            <button class="dropdown-toggle lang-toggle" onclick="toggleLangDropdown()" aria-label="切换语言">
+                <span id="currentLangLabel">中文</span>
+                <span class="dropdown-arrow" id="langArrow">▼</span>
+            </button>
+            <div class="dropdown-menu" id="langMenu">
+                <div class="dropdown-item" data-lang="zh" onclick="selectLanguage('zh')">中文</div>
+                <div class="dropdown-item" data-lang="en" onclick="selectLanguage('en')">English</div>
+                <div class="dropdown-item" data-lang="ja" onclick="selectLanguage('ja')">日本語</div>
+                <div class="dropdown-item" data-lang="ko" onclick="selectLanguage('ko')">한국어</div>
+                <div class="dropdown-item" data-lang="fr" onclick="selectLanguage('fr')">Français</div>
+                <div class="dropdown-item" data-lang="es" onclick="selectLanguage('es')">Español</div>
+                <div class="dropdown-item" data-lang="ru" onclick="selectLanguage('ru')">Русский</div>
+                <div class="dropdown-item" data-lang="de" onclick="selectLanguage('de')">Deutsch</div>
+            </div>
+        </div>
+        <!-- 保留原生select用于JS兼容 -->
+        <select id="langSelect" style="display:none;" onchange="setLanguage(this.value)">
             <option value="zh">中文</option>
             <option value="en">English</option>
             <option value="ja">日本語</option>
@@ -176,19 +633,136 @@
             <option value="ru">Русский</option>
             <option value="de">Deutsch</option>
         </select>
-        <button id="themeToggleBtn" class="theme-btn" onclick="toggleTheme()">🌙 深色模式</button>
+        <div class="custom-dropdown theme-dropdown" id="themeDropdown">
+            <button class="dropdown-toggle theme-toggle" onclick="toggleThemeDropdown()" aria-label="切换主题">
+                <span id="currentThemeLabel">🌙 深色模式</span>
+                <span class="dropdown-arrow" id="themeArrow">▼</span>
+            </button>
+            <div class="dropdown-menu" id="themeMenu">
+                <div class="dropdown-item" data-theme="dark" onclick="selectTheme('dark')">🌙 深色模式</div>
+                <div class="dropdown-item" data-theme="light" onclick="selectTheme('light')">☀️ 日间模式</div>
+                <div class="dropdown-item" data-theme="green" onclick="selectTheme('green')">🌿 护眼绿模式</div>
+            </div>
+        </div>
     </div>
+            <div class="scale-control" id="scaleControl">
+            <label for="scaleSlider">比例</label>
+            <input type="range" id="scaleSlider" class="scale-slider" min="50" max="150" value="100" step="5">
+            <span class="scale-value" id="scaleValue">100%</span>
+        </div>
     <!-- 顶部滚动横幅 -->
     <div class="marquee-container">
         <marquee id="customMarquee" behavior="scroll" direction="left" scrollamount="8"></marquee>
     </div>
+    <!-- 汉堡菜单按钮 -->
+    <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <!-- 菜单遮罩层 -->
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
+        <!-- 防止点击菜单项时关闭 -->
+    </div>
+    <!-- 侧边菜单面板 -->
+    <div class="menu-panel" id="menuPanel" onclick="event.stopPropagation()">
+        <div class="menu-header">
+            <span class="menu-title">班级日程提醒</span>
+            <button class="menu-close" onclick="closeMenu()">✕</button>
+        </div>
+        <nav class="menu-nav">
+            <a href="#" class="menu-link active" data-page="home">
+                <span class="menu-icon">◉</span> 首页
+            </a>
+            <a href="#" class="menu-link" data-page="practice">
+                <span class="menu-icon">✎</span> 练字提醒器
+            </a>
+            <a href="#" class="menu-link" data-page="quotes">
+                <span class="menu-icon">❝</span> 名言生成器
+            </a>
+            <a href="#" class="menu-link" data-page="essay">
+                <span class="menu-icon">☰</span> 语文作文赏析
+            </a>
+            <a href="#" class="menu-link" onclick="resetScale()" style="color:#f39c12;">
+                <span class="menu-icon">⟲</span> 重置比例到100%
+            </a>
+        </nav>
+    </div>
     <!-- 主内容区域 -->
+    <div id="page-home" class="page-section active">
     <div class="content-box">
         <div id="mainDisplay"></div>
         <div id="countdownDisplay"></div>
         <div id="discussCountdownDisplay" class="countdown discuss"></div>
         <div id="gaokaoCountdownDisplay" class="countdown gaokao"></div>
         <div id="btnContainer" class="btn-group"></div>
+    </div>
+    </div>
+    <!-- 练字提醒器页面 -->
+    <div id="page-practice" class="page-section">
+        <div class="content-box">
+            <div class="main-text" style="color:#3498db; font-size:3vw;">练字提醒器</div>
+            <div class="sub-text" style="font-size:1.3vw;">
+                <p>每日练字，持之以恒</p>
+                <p>练字不仅能提升书写水平，更能培养耐心与专注力</p>
+            </div>
+            <div id="practiceTimer" class="countdown practice" style="margin-top:20px;"></div>
+            <div class="sub-text" style="margin-top:25px; font-size:1.4vw;">
+                <p>练字时间：18:50 - 19:00</p>
+                <p>请在此时间段内认真练字，不要偷懒哦！</p>
+            </div>
+        </div>
+    </div>
+    <!-- 名言生成器页面 -->
+    <div id="page-quotes" class="page-section">
+        <div class="content-box">
+            <div class="main-text" style="color:#f39c12; font-size:3vw;">名言生成器</div>
+            <div class="quote-box" style="margin-top:20px; font-size:1.8vw; padding:20px 30px;">
+                <span id="quoteDisplayBig"></span>
+            </div>
+            <button id="quoteBtnBig" class="quote-btn" onclick="quoteBtnClickBig(this)" style="margin-top:15px; font-size:1.4vw; padding:8px 25px;">换一句</button>
+            <div class="sub-text" style="margin-top:25px; font-size:1.4vw;">
+                <p>每日一句，激励前行</p>
+            </div>
+        </div>
+    </div>
+    <!-- 语文作文赏析页面 -->
+    <div id="page-essay" class="page-section">
+        <div class="content-box">
+            <div class="main-text" style="color:#2ecc71; font-size:3vw;">语文作文赏析</div>
+            <div class="sub-text" style="font-size:1.6vw; margin-top:20px;">
+                <p>上传你的作文，一起赏析点评</p>
+            </div>
+            <div style="margin-top:30px; width:80%; max-width:600px;">
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:1.4vw; color:#bdc3c7; display:block; margin-bottom:8px;">上传作文文件（支持 .txt 格式）：</label>
+                    <input type="file" id="essayFileInput" accept=".txt" onchange="loadEssayFile(this)" style="font-size:1.3vw; color:#bdc3c7;">
+                </div>
+                <textarea id="essayInput" placeholder="在此粘贴你的作文内容，或点击上方上传txt文件..." style="width:100%; height:200px; padding:12px; font-size:1.3vw; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; font-family:inherit; resize:vertical; outline:none;"></textarea>
+                <div style="margin-top:15px; display:flex; gap:15px; justify-content:center;">
+                    <button onclick="submitEssay()" style="padding:8px 20px; font-size:1.3vw; border:none; border-radius:25px; background-color:#27ae60; color:#fff; cursor:pointer; font-weight:400; font-family:inherit;">提交赏析</button>
+                    <button onclick="clearEssay()" style="padding:8px 20px; font-size:1.3vw; border:none; border-radius:25px; background-color:#95a5a6; color:#fff; cursor:pointer; font-weight:400; font-family:inherit;">清空</button>
+                </div>
+            </div>
+            <div id="essayResult" style="margin-top:30px; width:80%; max-width:600px; display:none;">
+                <div style="background:rgba(255,255,255,0.05); padding:22px; border-radius:10px; border:1px solid rgba(255,255,255,0.08);">
+                    <h3 style="color:#f1c40f; margin-top:0;">赏析点评</h3>
+                    <div id="essayAnalysis" style="font-size:1.4vw; line-height:1.8; color:#ecf0f1;"></div>
+                </div>
+            </div>
+            <div style="margin-top:40px; width:80%; max-width:600px;">
+                <div style="background:rgba(255,255,255,0.03); padding:22px; border-radius:10px; border:1px solid rgba(255,255,255,0.06);">
+                    <h3 style="color:#f39c12; margin-top:0;">写作小技巧</h3>
+                    <ul style="font-size:1.4vw; line-height:2; color:#bdc3c7; padding-left:20px;">
+                        <li>开头要引人入胜，可以用设问、引用等手法</li>
+                        <li>中间段落要有详有略，重点内容要展开描写</li>
+                        <li>结尾要升华主题，呼应开头</li>
+                        <li>注意字迹工整，卷面整洁</li>
+                        <li>多积累好词好句，提升文采</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- 底部信息栏 -->
     <div class="bottom-bar">
@@ -231,6 +805,8 @@
                 btnLifeText: '再不练字你的人生已经掉链子了！！',
                 btnAdmit: '恩师我知道错了，我这就去练字',
                 btnGoodText: '知错能改，善莫大焉！赶紧动笔吧！✍️',
+                sleepReminder: '讨论时间结束，该睡觉了，再不睡觉会遇到幻翼的提醒！',
+                discussEnd: '讨论时间结束，该睡觉了，再不睡觉会遇到幻翼的提醒！',
                 quoteBtn: '换一句',
                 themeBtn: { dark: '深色模式', light: '日间模式', green: '护眼绿模式' },
                 marquee: MARQUEE_TEXT,
@@ -548,10 +1124,33 @@
             qd.classList.add('quote-out');
             setTimeout(() => {
                 generateQuote();
+            generateQuoteBig();
                 qd.classList.remove('quote-out');
             }, 250);
         }
         // 点击“换一句”按钮：按钮弹跳旋转动画 + 名言淡出淡入
+
+        // 名言生成器大页面功能
+        function generateQuoteBig() {
+            const list = T().quotes;
+            let index;
+            do {
+                index = Math.floor(Math.random() * list.length);
+            } while (index === lastQuoteIndex && list.length > 1);
+            lastQuoteIndex = index;
+            document.getElementById('quoteDisplayBig').innerText = list[index];
+        }
+        window.quoteBtnClickBig = function (btn) {
+            btn.classList.remove('spinning');
+            void btn.offsetWidth;
+            btn.classList.add('spinning');
+            const qd = document.getElementById('quoteDisplayBig');
+            qd.classList.add('quote-out');
+            setTimeout(() => {
+                generateQuoteBig();
+                qd.classList.remove('quote-out');
+            }, 250);
+        };
         window.quoteBtnClick = function (btn) {
             btn.classList.remove('spinning');
             void btn.offsetWidth; // 重置动画，保证连点也能播放
@@ -598,15 +1197,22 @@
             scheduleDisplay.innerHTML = `${L.todaySched}<span>${L.subjects[today]}</span> | ${L.tomorrowSched}<span>${L.subjects[tomorrow]}</span>`;
 
             // 2. 始终显示距离小组讨论的倒计时（带颜色切换）
-            let discussTarget = new Date(now);
-            discussTarget.setHours(22, 30, 0, 0);
-            let discussDiff = discussTarget - now;
+            // 讨论时间：22:20 - 22:40
+            let discussStart = new Date(now);
+            discussStart.setHours(22, 20, 0, 0);
+            let discussEnd = new Date(now);
+            discussEnd.setHours(22, 40, 0, 0);
+            let discussDiff = discussStart - now;
             if (discussDiff > 0) {
-                discussCountdownDisplay.classList.remove('active'); // 移除红色
+                discussCountdownDisplay.classList.remove('active');
                 discussCountdownDisplay.innerHTML = `<span class="heartbeat-anim">⏳</span> ${L.discussIn}${formatTime(discussDiff)}`;
-            } else {
-                discussCountdownDisplay.classList.add('active'); // 激活红色
+            } else if (now >= discussStart && now < discussEnd) {
+                discussCountdownDisplay.classList.add('active');
                 discussCountdownDisplay.innerHTML = `<span class="heartbeat-anim">🔥</span> ${L.discussNow}`;
+            } else {
+                // 22:40之后：讨论结束，该睡觉了
+                discussCountdownDisplay.classList.add('active');
+                discussCountdownDisplay.innerHTML = `<span class="heartbeat-anim">😴</span> ${L.discussEnd}`;
             }
 
             // 2.5 始终显示距离2027年高考（6月7日09:00开考）的倒计时
@@ -628,8 +1234,15 @@
             countdownDisplay.innerHTML = '';
             btnContainer.innerHTML = '';
 
-            // === 22:30 之后：小组讨论模式 ===
-            if (hours > 22 || (hours === 22 && minutes >= 30)) {
+            // === 22:40 之后：讨论结束，该睡觉了 ===
+            if (hours > 22 || (hours === 22 && minutes >= 40)) {
+                mainDisplay.className = 'main-text';
+                mainDisplay.style.color = '#e74c3c';
+                mainDisplay.style.textShadow = '3px 3px 0 #c0392b, 6px 6px 0 rgba(0,0,0,0.3)';
+                mainDisplay.innerHTML = L.sleepReminder;
+            }
+            // === 22:20 - 22:40：小组讨论进行中 ===
+            else if (hours === 22 && minutes >= 20) {
                 mainDisplay.className = 'main-text';
                 mainDisplay.innerHTML = L.mainNight;
             }
@@ -669,6 +1282,19 @@
                     countdownDisplay.innerHTML = `<span class="heartbeat-anim">⏳</span> ${L.practiceIn}${formatTime(practiceDiff)}`;
                 }
             }
+            // 更新练字提醒器页面的计时器
+            const practiceTimerEl = document.getElementById('practiceTimer');
+            if (practiceTimerEl) {
+                let nowP = new Date();
+                let pTarget = new Date(nowP);
+                pTarget.setHours(18, 50, 0, 0);
+                let pDiff = pTarget - nowP;
+                if (pDiff > 0) {
+                    practiceTimerEl.innerHTML = `<span class="heartbeat-anim">⏳</span> 距离练字开始还有：${formatTime(pDiff)}`;
+                } else {
+                    practiceTimerEl.innerHTML = `<span class="heartbeat-anim">🔥</span> 练字时间进行中！`;
+                }
+            }
         }
 
         // 渲染按钮的独立函数（文案随语言翻译）
@@ -678,16 +1304,16 @@
                 container.innerHTML = `<button class="btn btn-rebel" onclick="changeBtnState(1)">${L.btnNoPractice}</button>`;
             } else if (btnState === 1) {
                 container.innerHTML = `
-                    <div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#e67e22;">${L.btnRebelText}</div>
+                    <div class="sub-text" style="margin-top:0; font-size:1.8vw; color:#e67e22;">${L.btnRebelText}</div>
                     <button class="btn btn-stubborn" onclick="changeBtnState(2)">${L.btnStillNo}</button>
                 `;
             } else if (btnState === 2) {
                 container.innerHTML = `
-                    <div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#c0392b; font-weight:bold;">${L.btnLifeText}</div>
+                    <div class="sub-text" style="margin-top:0; font-size:1.8vw; color:#c0392b; font-weight:500;">${L.btnLifeText}</div>
                     <button class="btn btn-admit" onclick="changeBtnState(3)">${L.btnAdmit}</button>
                 `;
             } else if (btnState === 3) {
-                container.innerHTML = `<div class="sub-text" style="margin-top:0; font-size:2.5vw; color:#2ecc71;">${L.btnGoodText}</div>`;
+                container.innerHTML = `<div class="sub-text" style="margin-top:0; font-size:1.8vw; color:#2ecc71;">${L.btnGoodText}</div>`;
             }
         }
 
@@ -714,8 +1340,9 @@
             document.body.classList.remove('theme-light', 'theme-green');
             if (theme === 'light') document.body.classList.add('theme-light');
             if (theme === 'green') document.body.classList.add('theme-green');
-            const btn = document.getElementById('themeToggleBtn');
-            if (btn) btn.innerText = `${themeIcons[theme]} ${T().themeBtn[theme]}`;
+            // 同步自定义下拉菜单标签
+            const themeLabel = document.getElementById('currentThemeLabel');
+            if (themeLabel) themeLabel.innerText = `${themeIcons[theme]} ${T().themeBtn[theme]}`;
             localStorage.setItem('pageTheme', theme);
         }
         window.toggleTheme = function () {
@@ -723,6 +1350,55 @@
             currentTheme = themeList[(idx + 1) % themeList.length];
             applyTheme(currentTheme);
         }
+        // ============ 自定义语言下拉菜单 ============
+        window.toggleLangDropdown = function() {
+            var dropdown = document.getElementById('langDropdown');
+            var themeDropdown = document.getElementById('themeDropdown');
+            // 关闭其他下拉菜单
+            if (themeDropdown.classList.contains('active')) {
+                themeDropdown.classList.remove('active');
+            }
+            dropdown.classList.toggle('active');
+        }
+        window.selectLanguage = function(lang) {
+            // 更新自定义下拉菜单显示
+            var langNames = {
+                'zh': '中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어',
+                'fr': 'Français', 'es': 'Español', 'ru': 'Русский', 'de': 'Deutsch'
+            };
+            document.getElementById('currentLangLabel').innerText = langNames[lang] || lang;
+            // 关闭下拉菜单
+            document.getElementById('langDropdown').classList.remove('active');
+            // 调用原有语言切换逻辑
+            setLanguage(lang);
+        }
+        // ============ 自定义主题下拉菜单 ============
+        window.toggleThemeDropdown = function() {
+            var dropdown = document.getElementById('themeDropdown');
+            var langDropdown = document.getElementById('langDropdown');
+            // 关闭其他下拉菜单
+            if (langDropdown.classList.contains('active')) {
+                langDropdown.classList.remove('active');
+            }
+            dropdown.classList.toggle('active');
+        }
+        window.selectTheme = function(theme) {
+            currentTheme = theme;
+            applyTheme(theme);
+            // 关闭下拉菜单
+            document.getElementById('themeDropdown').classList.remove('active');
+        }
+        // 点击页面其他地方关闭下拉菜单
+        document.addEventListener('click', function(e) {
+            var langDropdown = document.getElementById('langDropdown');
+            var themeDropdown = document.getElementById('themeDropdown');
+            if (!langDropdown.contains(e.target)) {
+                langDropdown.classList.remove('active');
+            }
+            if (!themeDropdown.contains(e.target)) {
+                themeDropdown.classList.remove('active');
+            }
+        });
 
         // ============ 语言切换逻辑 ============
         function setLanguage(lang) {
@@ -734,10 +1410,18 @@
             document.title = L.title;
             document.getElementById('customMarquee').innerText = L.marquee;
             document.getElementById('quoteBtn').innerText = L.quoteBtn;
+            // 同步自定义下拉菜单标签
+            var langNames = {
+                'zh': '中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어',
+                'fr': 'Français', 'es': 'Español', 'ru': 'Русский', 'de': 'Deutsch'
+            };
+            var langLabel = document.getElementById('currentLangLabel');
+            if (langLabel) langLabel.innerText = langNames[lang] || lang;
             const sel = document.getElementById('langSelect');
             if (sel) sel.value = lang;
             lastQuoteIndex = -1;
-            generateQuote();      // 立即换成当前语言的名言
+            generateQuote();
+            generateQuoteBig();      // 立即换成当前语言的名言
             applyTheme(currentTheme); // 刷新主题按钮文字
             checkTime();          // 刷新倒计时与主提示
             updateClock();        // 刷新日期时间
@@ -752,14 +1436,177 @@
             document.getElementById('customMarquee').innerText = L.marquee;
             document.getElementById('quoteBtn').innerText = L.quoteBtn;
             document.getElementById('langSelect').value = currentLang;
+            // 初始化自定义下拉菜单标签
+            var langNames = {
+                'zh': '中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어',
+                'fr': 'Français', 'es': 'Español', 'ru': 'Русский', 'de': 'Deutsch'
+            };
+            var langLabel = document.getElementById('currentLangLabel');
+            if (langLabel) langLabel.innerText = langNames[currentLang] || currentLang;
+            var themeLabel = document.getElementById('currentThemeLabel');
+            if (themeLabel) themeLabel.innerText = `${themeIcons[currentTheme]} ${L.themeBtn[currentTheme]}`;
             generateQuote();
+            generateQuoteBig();
             applyTheme(currentTheme);
             checkTime();
             updateClock();
         })();
-        setInterval(checkTime, 1000);
+
+        // ============ 菜单切换逻辑 ============
+        window.toggleMenu = function() {
+            var btn = document.getElementById('hamburgerBtn');
+            var overlay = document.getElementById('menuOverlay');
+            var panel = document.getElementById('menuPanel');
+            btn.classList.toggle('active');
+            overlay.classList.toggle('active');
+            panel.classList.toggle('active');
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
+        window.closeMenu = function() {
+            var btn = document.getElementById('hamburgerBtn');
+            var overlay = document.getElementById('menuOverlay');
+            var panel = document.getElementById('menuPanel');
+            btn.classList.remove('active');
+            overlay.classList.remove('active');
+            panel.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        // ============ 页面导航逻辑（带动画） ============
+        function switchPage(pageId) {
+            // 关闭菜单
+            closeMenu();
+            // 获取当前激活页面
+            var currentPages = document.querySelectorAll('.page-section.active');
+            // 隐藏当前页面（带淡出动画）
+            currentPages.forEach(function(page) {
+                page.classList.remove('active', 'page-enter');
+                page.style.opacity = '0';
+                page.style.transform = 'translateY(-8px)';
+            });
+            // 显示目标页面（带淡入动画）
+            setTimeout(function() {
+                currentPages.forEach(function(page) {
+                    page.style.display = 'none';
+                });
+                var targetPage = document.getElementById('page-' + pageId);
+                targetPage.style.display = 'flex';
+                // 强制重绘
+                void targetPage.offsetWidth;
+                targetPage.classList.add('active', 'page-enter');
+                targetPage.style.opacity = '1';
+                targetPage.style.transform = 'translateY(0)';
+                // 动画结束后移除动画类
+                setTimeout(function() {
+                    targetPage.classList.remove('page-enter');
+                }, 400);
+            }, 150);
+            // 更新菜单按钮状态
+            document.querySelectorAll('.menu-link').forEach(function(link) {
+                link.classList.remove('active');
+            });
+            var activeLink = document.querySelector('.menu-link[data-page="' + pageId + '"]');
+            if (activeLink) activeLink.classList.add('active');
+            // 如果切换到名言页面，初始化名言
+            if (pageId === 'quotes') {
+                generateQuoteBig();
+            }
+        }
+        // 绑定菜单导航点击事件
+        document.querySelectorAll('.menu-link').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var pageId = this.getAttribute('data-page');
+                switchPage(pageId);
+            });
+        });
+                // ============ 自定义比例调整功能 ============
+        let currentScale = parseFloat(localStorage.getItem('pageScale')) || 100;
+        function applyScale(scale) {
+            // 限制范围 50% - 150%
+            scale = Math.max(50, Math.min(150, scale));
+            currentScale = scale;
+            localStorage.setItem('pageScale', scale);
+            // 对 body 应用 scale 变换，使用 transform-origin 居中缩放
+            document.body.style.transform = 'scale(' + (scale / 100) + ')';
+            document.body.style.transformOrigin = 'center top';
+            // 更新滑块显示值
+            const slider = document.getElementById('scaleSlider');
+            const valueLabel = document.getElementById('scaleValue');
+            if (slider) slider.value = scale;
+            if (valueLabel) valueLabel.innerText = scale + '%';
+        }
+        // 滑块输入事件
+        window.addEventListener('load', function() {
+            applyScale(currentScale);
+            const slider = document.getElementById('scaleSlider');
+            if (slider) {
+                slider.addEventListener('input', function() {
+                    applyScale(parseInt(this.value));
+                });
+            }
+        });
+        window.resetScale = function() {
+            applyScale(100);
+        };
+
+setInterval(checkTime, 1000);
         setInterval(updateClock, 1000);
         setInterval(animateQuoteChange, 10000);
+        // 作文赏析功能
+        window.submitEssay = function() {
+            const essay = document.getElementById('essayInput').value.trim();
+            if (!essay) {
+                alert('请先输入作文内容！');
+                return;
+            }
+            const resultDiv = document.getElementById('essayResult');
+            const analysisDiv = document.getElementById('essayAnalysis');
+            
+            // 简单的作文分析
+            const charCount = essay.length;
+            const paragraphCount = essay.split(/[\n\r]+/).filter(p => p.trim()).length;
+            
+            let analysis = '<p><strong>作文统计：</strong></p>';
+            analysis += '<p>字数：' + charCount + ' 字</p>';
+            analysis += '<p>段落数：' + paragraphCount + ' 段</p>';
+            
+            if (charCount < 200) {
+                analysis += '<p style="color:#e74c3c;">提示：作文内容较短，建议扩充到600字以上。</p>';
+            } else if (charCount < 400) {
+                analysis += '<p style="color:#f39c12;">提示：内容可以再丰富一些，多加一些细节描写会更好。</p>';
+            } else {
+                analysis += '<p style="color:#2ecc71;">很棒！作文内容充实，继续加油！</p>';
+            }
+            
+            analysis += '<p><strong>赏析建议：</strong></p>';
+            analysis += '<ul>';
+            analysis += '<li>注意开头是否引人入胜</li>';
+            analysis += '<li>检查中间段落是否有详有略</li>';
+            analysis += '<li>结尾是否升华了主题</li>';
+            analysis += '<li>字迹是否工整清晰</li>';
+            analysis += '</ul>';
+            
+            analysisDiv.innerHTML = analysis;
+            resultDiv.style.display = 'block';
+        };
+        
+        window.clearEssay = function() {
+            document.getElementById('essayInput').value = '';
+            document.getElementById('essayResult').style.display = 'none';
+        };
+        
+        // 读取上传的txt文件
+        window.loadEssayFile = function(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('essayInput').value = e.target.result;
+            };
+            reader.readAsText(file, 'utf-8');
+        };
+
     </script>
 </body>
 </html>
+
