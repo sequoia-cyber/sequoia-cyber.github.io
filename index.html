@@ -451,6 +451,8 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
 .menu-panel.active .menu-link:nth-child(2) { transition: all 0.35s ease 0.12s; }
 .menu-panel.active .menu-link:nth-child(3) { transition: all 0.35s ease 0.18s; }
 .menu-panel.active .menu-link:nth-child(4) { transition: all 0.35s ease 0.24s; }
+.menu-panel.active .menu-link:nth-child(5) { transition: all 0.35s ease 0.30s; }
+.menu-panel.active .menu-link:nth-child(6) { transition: all 0.35s ease 0.36s; }
 
 .menu-icon {
     width: 36px;
@@ -983,6 +985,62 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
 #essayAnalysis { font-size: clamp(13px, 1.15vw, 19px); line-height: 1.85; color: var(--text); }
 #essayAnalysis p { color: var(--text); }
 
+/* SECTION: essay-game 猜分数游戏 */
+.essay-stats { display:flex; gap:16px; flex-wrap:wrap; margin:16px 0; font-size:clamp(13px,1.1vw,17px); color:var(--text-dim); }
+.essay-stat { background:var(--glass); border:1px solid var(--stroke); border-radius:12px; padding:8px 16px; }
+.essay-stat span { color:var(--accent); font-weight:600; }
+.guess-section { margin:16px 0; padding:18px; background:var(--glass); border:1px solid var(--stroke); border-radius:14px; }
+.guess-section h4 { margin:0 0 12px; font-size:clamp(14px,1.15vw,19px); color:var(--accent); font-weight:600; letter-spacing:0.08em; }
+.guess-row { display:flex; align-items:center; gap:12px; margin:10px 0; flex-wrap:wrap; }
+.guess-label { min-width:56px; font-size:clamp(14px,1.1vw,17px); font-weight:600; color:var(--text); }
+.guess-input { width:72px; padding:8px 10px; font-size:16px; font-family:inherit; text-align:center; color:var(--text); background:var(--glass); border:1px solid var(--stroke); border-radius:10px; outline:none; transition:border-color 0.3s ease; }
+.guess-input:focus { border-color:var(--stroke-gold); }
+.guess-input.correct { border-color:var(--green); background:rgba(127,214,164,0.10); }
+.guess-input.wrong { border-color:var(--red); background:rgba(242,131,111,0.08); }
+.guess-hint { flex:1; min-width:180px; font-size:clamp(12px,1vw,15px); color:var(--text-dim); line-height:1.6; }
+.guess-submit { margin-top:14px; }
+.classical-bonus { margin:12px 0; padding:12px 16px; background:rgba(227,185,104,0.08); border:1px solid var(--stroke-gold); border-radius:12px; font-size:clamp(13px,1.05vw,16px); color:var(--accent); }
+.final-result { margin-top:18px; padding:18px; background:var(--glass); border:1px solid var(--stroke-gold); border-radius:14px; }
+.final-result h4 { margin:0 0 10px; color:var(--accent); font-size:clamp(15px,1.2vw,20px); }
+.score-bar { display:flex; gap:18px; flex-wrap:wrap; margin:12px 0; }
+.score-item { text-align:center; padding:10px 18px; background:var(--glass); border:1px solid var(--stroke); border-radius:12px; min-width:80px; }
+.score-item .score-num { font-size:clamp(22px,2vw,36px); font-weight:700; color:var(--accent); }
+.score-item .score-cat { font-size:clamp(11px,0.9vw,14px); color:var(--text-dim); margin-top:4px; }
+
+/* SECTION: poster 大字报生成器 */
+.poster-controls { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+.poster-control-group { display:flex; flex-direction:column; gap:6px; }
+.poster-control-group label { font-size:clamp(12px,0.95vw,15px); color:var(--text-dim); letter-spacing:0.06em; }
+.poster-select, .poster-range { width:100%; padding:8px 12px; font-size:14px; font-family:inherit; color:var(--text); background:var(--glass); border:1px solid var(--stroke); border-radius:10px; outline:none; transition:border-color 0.3s ease; }
+.poster-select:focus, .poster-range:focus { border-color:var(--stroke-gold); }
+.poster-color-row { display:flex; align-items:center; gap:10px; }
+.poster-color-input { width:42px; height:36px; border:1px solid var(--stroke); border-radius:8px; cursor:pointer; background:transparent; padding:2px; }
+.poster-color-hex { flex:1; padding:8px 12px; font-size:14px; font-family:'Courier New',monospace; color:var(--text); background:var(--glass); border:1px solid var(--stroke); border-radius:10px; outline:none; }
+.poster-textarea { width:100%; height:110px; padding:14px 16px; font-size:16px; line-height:1.7; font-family:inherit; color:var(--text); background:var(--glass); border:1px solid var(--stroke); border-radius:14px; outline:none; resize:vertical; transition:border-color 0.3s ease; margin-bottom:14px; }
+.poster-textarea:focus { border-color:var(--stroke-gold); box-shadow:0 0 0 3px var(--accent-soft); }
+.poster-textarea::placeholder { color:var(--text-dim); opacity:0.6; }
+.poster-preview-wrap { margin-top:18px; }
+.poster-preview-label { font-size:clamp(13px,1vw,16px); color:var(--text-dim); margin-bottom:10px; letter-spacing:0.06em; }
+.poster-preview { width:100%; min-height:280px; border-radius:16px; display:flex; align-items:center; justify-content:center; padding:36px 28px; overflow:hidden; word-break:break-all; line-height:1.6; box-shadow:var(--shadow); transition:all 0.3s ease; }
+
+/* SECTION: picker 随机抽取系统 */
+.picker-display { position:relative; width:100%; min-height:200px; margin:20px 0; display:flex; align-items:center; justify-content:center; border-radius:var(--radius); background:var(--glass); border:1px solid var(--stroke); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); overflow:hidden; }
+.picker-name { font-size:clamp(36px,4vw,72px); font-weight:700; color:var(--accent); text-align:center; transition:all 0.15s ease; letter-spacing:0.1em; z-index:2; position:relative; }
+.picker-name.cycling { filter:blur(2px); opacity:0.7; }
+.picker-name.winner { animation:winnerPop 0.8s ease forwards; filter:none; opacity:1; }
+@keyframes winnerPop { 0%{transform:scale(0.3);opacity:0} 50%{transform:scale(1.3)} 70%{transform:scale(0.95)} 100%{transform:scale(1);opacity:1} }
+.picker-id { display:block; font-size:clamp(14px,1.3vw,22px); color:var(--text-dim); margin-top:8px; letter-spacing:0.15em; font-weight:400; }
+.picker-particles { position:absolute; inset:0; pointer-events:none; z-index:1; }
+.picker-particle { position:absolute; border-radius:50%; animation:particleFloat 2s ease-out forwards; }
+@keyframes particleFloat { 0%{transform:translate(0,0) scale(1);opacity:1} 100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0} }
+.picker-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:8px; margin:18px 0; max-height:280px; overflow-y:auto; padding:4px; }
+.picker-grid-item { padding:8px 6px; text-align:center; font-size:clamp(12px,0.95vw,15px); color:var(--text-dim); background:var(--glass); border:1px solid var(--stroke); border-radius:10px; transition:all 0.3s ease; cursor:default; }
+.picker-grid-item.highlight { background:var(--accent-soft); border-color:var(--stroke-gold); color:var(--accent); transform:scale(1.05); }
+.picker-grid-item.winner-item { background:linear-gradient(135deg,var(--accent-soft),rgba(227,185,104,0.22)); border-color:var(--accent); color:var(--accent); font-weight:700; transform:scale(1.12); box-shadow:0 4px 20px rgba(227,185,104,0.30); }
+.picker-confetti { position:fixed; pointer-events:none; z-index:999; }
+.picker-confetti-piece { position:fixed; width:10px; height:10px; animation:confettiFall 2.5s ease-out forwards; }
+@keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
 /* SECTION: responsive 小屏适配 */
 @media screen and (max-width: 768px) {
     .ticker-bar { height: 38px; }
@@ -1088,6 +1146,12 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
             <a href="#" class="menu-link" data-page="essay">
                 <span class="menu-icon">☰</span> 语文作文赏析
             </a>
+            <a href="#" class="menu-link" data-page="poster">
+                <span class="menu-icon">✦</span> 大字报生成器
+            </a>
+            <a href="#" class="menu-link" data-page="picker">
+                <span class="menu-icon">⚅</span> 随机抽取系统
+            </a>
         </nav>
         <div class="menu-footer">学不可以已 · 荀子</div>
     </div>
@@ -1133,15 +1197,17 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
             </div>
         </div>
     </div>
-    <!-- SECTION: page-essay 语文作文赏析 -->
+    <!-- SECTION: page-essay 语文作文赏析（增强版） -->
     <div id="page-essay" class="page-section">
         <div class="content-box">
             <div class="eyebrow">ESSAY REVIEW · 言之有文</div>
             <div class="main-text page-title accent-green">语文作文赏析</div>
             <div class="sub-text">
-                <p>上传你的作文，一起赏析点评</p>
+                <p>上传你的作文，体验猜分数游戏，一起赏析点评</p>
             </div>
             <div class="essay-panel">
+                <label class="field-label">作文标题（可选）</label>
+                <input type="text" id="essayTitle" class="essay-input" style="height:42px;margin-bottom:12px;" placeholder="请输入作文标题...">
                 <label class="field-label" for="essayInput">上传作文文件（支持 .txt 格式）</label>
                 <input type="file" id="essayFileInput" accept=".txt" onchange="loadEssayFile(this)" class="file-input">
                 <textarea id="essayInput" class="essay-input" placeholder="在此粘贴你的作文内容，或点击上方上传 txt 文件..."></textarea>
@@ -1151,8 +1217,20 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
                 </div>
             </div>
             <div id="essayResult" class="info-card" style="display:none;">
-                <h3>赏析点评</h3>
+                <h3>作文统计与评分</h3>
                 <div id="essayAnalysis"></div>
+                <div id="guessGame" style="display:none;"></div>
+            </div>
+            <div class="info-card">
+                <h3>评分规则说明</h3>
+                <ul>
+                    <li>满分60分，内容、情感、表达各占20分</li>
+                    <li>不写标题扣2分</li>
+                    <li>满800字：在40-60分之间随机生成两个分数，差值小于6分取平均值，否则三评</li>
+                    <li>600-800字：按字数比例给分</li>
+                    <li>不足600字：按行给分，两行1分</li>
+                    <li>文言文词语加分：静言思之、揆诸当下、君不见等，每个+1分</li>
+                </ul>
             </div>
             <div class="info-card">
                 <h3>写作小技巧</h3>
@@ -1163,6 +1241,83 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
                     <li>注意字迹工整，卷面整洁</li>
                     <li>多积累好词好句，提升文采</li>
                 </ul>
+            </div>
+        </div>
+    </div>
+    <!-- SECTION: page-poster 大字报生成器 -->
+    <div id="page-poster" class="page-section">
+        <div class="content-box">
+            <div class="eyebrow">POSTER MAKER · 大字报生成</div>
+            <div class="main-text page-title accent-blue">大字报生成器</div>
+            <div class="sub-text">
+                <p>自定义字体、颜色和大小，生成醒目大字报</p>
+            </div>
+            <div class="essay-panel">
+                <div class="poster-controls">
+                    <div class="poster-control-group">
+                        <label>字体选择</label>
+                        <select id="posterFont" class="poster-select" onchange="updatePosterPreview()">
+                            <option value="'HarmonyOS Sans SC', sans-serif">HarmonyOS Sans SC</option>
+                            <option value="'Microsoft YaHei', sans-serif">微软雅黑</option>
+                            <option value="'SimHei', sans-serif">黑体</option>
+                            <option value="'KaiTi', serif">楷体</option>
+                            <option value="'FangSong', serif">仿宋</option>
+                            <option value="'STZhongsong', serif">华文中宋</option>
+                            <option value="'STSong', serif">华文宋体</option>
+                        </select>
+                    </div>
+                    <div class="poster-control-group">
+                        <label>字体大小</label>
+                        <input type="range" id="posterSize" class="poster-range" min="32" max="120" value="64" oninput="updatePosterPreview()">
+                    </div>
+                    <div class="poster-control-group">
+                        <label>文字颜色</label>
+                        <div class="poster-color-row">
+                            <input type="color" id="posterColor" class="poster-color-input" value="#f7e3b0" oninput="updatePosterPreview()">
+                            <input type="text" id="posterColorHex" class="poster-color-hex" value="#f7e3b0" oninput="updatePosterFromHex()">
+                        </div>
+                    </div>
+                    <div class="poster-control-group">
+                        <label>背景颜色</label>
+                        <div class="poster-color-row">
+                            <input type="color" id="posterBg" class="poster-color-input" value="#0a0e1c" oninput="updatePosterPreview()">
+                            <input type="text" id="posterBgHex" class="poster-color-hex" value="#0a0e1c" oninput="updatePosterFromHex()">
+                        </div>
+                    </div>
+                </div>
+                <textarea id="posterText" class="poster-textarea" placeholder="请输入大字报内容..." oninput="updatePosterPreview()"></textarea>
+                <div class="btn-group">
+                    <button class="btn btn-rebel" onclick="downloadPoster()">下载大字报</button>
+                    <button class="btn btn-ghost" onclick="clearPoster()">清空</button>
+                </div>
+            </div>
+            <div class="poster-preview-wrap">
+                <div class="poster-preview-label">预览效果</div>
+                <div id="posterPreview" class="poster-preview">请输入文字</div>
+            </div>
+        </div>
+    </div>
+    <!-- SECTION: page-picker 随机抽取系统 -->
+    <div id="page-picker" class="page-section">
+        <div class="content-box">
+            <div class="eyebrow">RANDOM PICKER · 随机抽取</div>
+            <div class="main-text page-title accent-green">随机抽取系统</div>
+            <div class="sub-text">
+                <p>点击按钮，随机抽取同学，带有炫酷动画效果</p>
+            </div>
+            <div class="essay-panel">
+                <div class="picker-display" id="pickerDisplay">
+                    <div class="picker-particles" id="pickerParticles"></div>
+                    <div class="picker-name" id="pickerName">点击按钮开始</div>
+                </div>
+                <div class="btn-group" style="margin-top:20px;">
+                    <button class="btn btn-admit" onclick="startPicker()" id="pickerBtn">开始抽取</button>
+                    <button class="btn btn-ghost" onclick="resetPicker()">重置</button>
+                </div>
+            </div>
+            <div class="info-card">
+                <h3>班级同学列表（共41人）</h3>
+                <div id="pickerGrid" class="picker-grid"></div>
             </div>
         </div>
     </div>
@@ -1958,59 +2113,373 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
         setInterval(checkTime, 1000);
         setInterval(updateClock, 1000);
         setInterval(animateQuoteChange, 10000);
-        // 作文赏析功能
+        // ============ 作文赏析功能（增强版） ============
         window.submitEssay = function() {
             const essay = document.getElementById('essayInput').value.trim();
-            if (!essay) {
-                alert('请先输入作文内容！');
-                return;
-            }
+            if (!essay) { alert('请先输入作文内容！'); return; }
+            const title = (document.getElementById('essayTitle').value || '').trim();
             const resultDiv = document.getElementById('essayResult');
             const analysisDiv = document.getElementById('essayAnalysis');
-            
-            // 简单的作文分析
-            const charCount = essay.length;
+            const guessDiv = document.getElementById('guessGame');
+
+            const charCount = essay.replace(/\s/g,'').length;
+            const lineCount = essay.split(/[\n\r]+/).filter(p => p.trim()).length;
             const paragraphCount = essay.split(/[\n\r]+/).filter(p => p.trim()).length;
-            
-            let analysis = '<p><strong>作文统计：</strong></p>';
-            analysis += '<p>字数：' + charCount + ' 字</p>';
-            analysis += '<p>段落数：' + paragraphCount + ' 段</p>';
-            
-            if (charCount < 200) {
-                analysis += '<p style="color:#e74c3c;">提示：作文内容较短，建议扩充到600字以上。</p>';
-            } else if (charCount < 400) {
-                analysis += '<p style="color:#f39c12;">提示：内容可以再丰富一些，多加一些细节描写会更好。</p>';
+
+            // 文言文词语加分
+            const classicalWords = ['静言思之','揆诸当下','君不见','虽则','于焉','洵美','岂不','亦已','曷不','何乃','既而','须臾','俄顷','倏忽','遽然','踯躅','踟蹰','怅惘','怅然','彷徨','踌躇','辗转','徘徊','徜徉','流连','缱绻','旖旎','翩跹','氤氲','潋滟'];
+            let classicalBonus = 0;
+            let foundWords = [];
+            classicalWords.forEach(w => {
+                if (essay.includes(w)) { classicalBonus++; foundWords.push(w); }
+            });
+
+            // 计算分数
+            let contentScore, emotionScore, expressScore;
+            if (charCount < 600) {
+                // 按行给分，两行1分
+                let lineScore = Math.floor(lineCount / 2);
+                lineScore = Math.min(lineScore, 40);
+                contentScore = Math.floor(lineScore / 3);
+                emotionScore = Math.floor(lineScore / 3);
+                expressScore = lineScore - contentScore - emotionScore;
+            } else if (charCount < 800) {
+                // 按字数比例给分
+                let ratio = (charCount - 600) / 200;
+                let base = 30 + Math.floor(ratio * 10);
+                contentScore = Math.floor(base / 3) + Math.floor(Math.random()*4);
+                emotionScore = Math.floor(base / 3) + Math.floor(Math.random()*4);
+                expressScore = base - contentScore - emotionScore + Math.floor(Math.random()*3);
             } else {
-                analysis += '<p style="color:#2ecc71;">很棒！作文内容充实，继续加油！</p>';
+                // 满800字：40-60之间随机两个分数
+                let s1 = 40 + Math.floor(Math.random() * 21);
+                let s2 = 40 + Math.floor(Math.random() * 21);
+                let finalScore;
+                if (Math.abs(s1 - s2) < 6) {
+                    finalScore = Math.round((s1 + s2) / 2);
+                } else {
+                    // 三评
+                    let s3 = 40 + Math.floor(Math.random() * 21);
+                    finalScore = s3;
+                }
+                contentScore = Math.floor(finalScore / 3);
+                emotionScore = Math.floor(finalScore / 3);
+                expressScore = finalScore - contentScore - emotionScore;
             }
-            
-            analysis += '<p><strong>赏析建议：</strong></p>';
-            analysis += '<ul>';
-            analysis += '<li>注意开头是否引人入胜</li>';
-            analysis += '<li>检查中间段落是否有详有略</li>';
-            analysis += '<li>结尾是否升华了主题</li>';
-            analysis += '<li>字迹是否工整清晰</li>';
-            analysis += '</ul>';
-            
+            // 限制每项不超过20
+            contentScore = Math.min(contentScore, 20);
+            emotionScore = Math.min(emotionScore, 20);
+            expressScore = Math.min(expressScore, 20);
+
+            let totalScore = contentScore + emotionScore + expressScore + classicalBonus;
+            // 不写标题扣2分
+            let titlePenalty = title ? 0 : -2;
+            totalScore = Math.max(0, totalScore + titlePenalty);
+            totalScore = Math.min(totalScore, 60);
+
+            // 显示统计
+            let analysis = '<div class="essay-stats">';
+            analysis += '<div class="essay-stat">字数：<span>' + charCount + '</span> 字</div>';
+            analysis += '<div class="essay-stat">段落数：<span>' + paragraphCount + '</span> 段</div>';
+            if (classicalBonus > 0) {
+                analysis += '<div class="essay-stat">文言文加分：<span>+' + classicalBonus + '</span> 分</div>';
+            }
+            if (!title) {
+                analysis += '<div class="essay-stat" style="color:var(--red);">未写标题：<span>-2</span> 分</div>';
+            }
+            analysis += '</div>';
+            if (foundWords.length > 0) {
+                analysis += '<div class="classical-bonus">文言词语运用：' + foundWords.join('、') + '（共 +' + classicalBonus + ' 分）</div>';
+            }
+            analysis += '<div style="margin-top:12px;color:var(--text-dim);font-size:clamp(13px,1vw,16px);">猜中每一项的分数后，即可揭晓最终成绩！</div>';
             analysisDiv.innerHTML = analysis;
             resultDiv.style.display = 'block';
+
+            // 猜分数游戏
+            guessDiv.innerHTML = '<div class="guess-section">' +
+                '<h4>猜分数游戏</h4>' +
+                '<div class="guess-row"><span class="guess-label">内容</span><input type="number" class="guess-input" id="guessContent" min="0" max="20" placeholder="0-20"><span class="guess-hint" id="hintContent"></span></div>' +
+                '<div class="guess-row"><span class="guess-label">情感</span><input type="number" class="guess-input" id="guessEmotion" min="0" max="20" placeholder="0-20"><span class="guess-hint" id="hintEmotion"></span></div>' +
+                '<div class="guess-row"><span class="guess-label">表达</span><input type="number" class="guess-input" id="guessExpress" min="0" max="20" placeholder="0-20"><span class="guess-hint" id="hintExpress"></span></div>' +
+                '<button class="btn btn-rebel guess-submit" onclick="checkGuess()">提交猜测</button>' +
+                '<div id="finalResult" style="display:none;"></div>' +
+                '</div>';
+            guessDiv.style.display = 'block';
+            // 存储实际分数供游戏使用
+            window._essayScores = { content: contentScore, emotion: emotionScore, express: expressScore, total: totalScore, bonus: classicalBonus, titlePenalty: titlePenalty };
         };
-        
+
+        window.checkGuess = function() {
+            const scores = window._essayScores;
+            if (!scores) return;
+            const gc = parseInt(document.getElementById('guessContent').value) || 0;
+            const ge = parseInt(document.getElementById('guessEmotion').value) || 0;
+            const gx = parseInt(document.getElementById('guessExpress').value) || 0;
+            let allCorrect = true;
+            const pairs = [
+                { guess: gc, actual: scores.content, inputId: 'guessContent', hintId: 'hintContent', name: '内容' },
+                { guess: ge, actual: scores.emotion, inputId: 'guessEmotion', hintId: 'hintEmotion', name: '情感' },
+                { guess: gx, actual: scores.express, inputId: 'guessExpress', hintId: 'hintExpress', name: '表达' }
+            ];
+            pairs.forEach(p => {
+                const inp = document.getElementById(p.inputId);
+                const hint = document.getElementById(p.hintId);
+                inp.classList.remove('correct','wrong');
+                if (p.guess === p.actual) {
+                    inp.classList.add('correct');
+                    hint.innerHTML = '✓ 猜对了！' + p.name + '得分：' + p.actual + ' 分';
+                    hint.style.color = 'var(--green)';
+                } else if (p.guess > p.actual) {
+                    inp.classList.add('wrong');
+                    hint.innerHTML = '✗ ' + p.name + '部分才没有写到得' + p.guess + '分的水平呢';
+                    hint.style.color = 'var(--red)';
+                    allCorrect = false;
+                } else {
+                    inp.classList.add('wrong');
+                    hint.innerHTML = '✗ 做人要有自信哦，我觉得你这一部分' + p.name + '的分数还可以更高';
+                    hint.style.color = 'var(--amber)';
+                    allCorrect = false;
+                }
+            });
+            // 显示最终结果（无论猜对与否都可以看到）
+            showFinalResult(scores);
+        };
+
+        function showFinalResult(scores) {
+            const fr = document.getElementById('finalResult');
+            let html = '<div class="final-result"><h4>最终成绩揭晓</h4><div class="score-bar">';
+            html += '<div class="score-item"><div class="score-num">' + scores.content + '</div><div class="score-cat">内容</div></div>';
+            html += '<div class="score-item"><div class="score-num">' + scores.emotion + '</div><div class="score-cat">情感</div></div>';
+            html += '<div class="score-item"><div class="score-num">' + scores.express + '</div><div class="score-cat">表达</div></div>';
+            if (scores.bonus > 0) html += '<div class="score-item"><div class="score-num">+' + scores.bonus + '</div><div class="score-cat">文言加分</div></div>';
+            if (scores.titlePenalty < 0) html += '<div class="score-item"><div class="score-num">' + scores.titlePenalty + '</div><div class="score-cat">标题扣分</div></div>';
+            html += '<div class="score-item" style="border-color:var(--accent);"><div class="score-num" style="font-size:clamp(28px,2.5vw,44px);">' + scores.total + '</div><div class="score-cat">总分</div></div>';
+            html += '</div></div>';
+            fr.innerHTML = html;
+            fr.style.display = 'block';
+        }
+
         window.clearEssay = function() {
             document.getElementById('essayInput').value = '';
+            document.getElementById('essayTitle').value = '';
+            document.getElementById('essayFileInput').value = '';
             document.getElementById('essayResult').style.display = 'none';
+            document.getElementById('guessGame').style.display = 'none';
+            window._essayScores = null;
         };
-        
-        // 读取上传的txt文件
+
         window.loadEssayFile = function(input) {
             const file = input.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('essayInput').value = e.target.result;
-            };
+            reader.onload = function(e) { document.getElementById('essayInput').value = e.target.result; };
             reader.readAsText(file, 'utf-8');
         };
+
+        // ============ 大字报生成器 ============
+        window.updatePosterPreview = function() {
+            const text = document.getElementById('posterText').value || '请输入文字';
+            const font = document.getElementById('posterFont').value;
+            const size = document.getElementById('posterSize').value;
+            const color = document.getElementById('posterColor').value;
+            const bg = document.getElementById('posterBg').value;
+            document.getElementById('posterColorHex').value = color;
+            document.getElementById('posterBgHex').value = bg;
+            const preview = document.getElementById('posterPreview');
+            preview.style.fontFamily = font;
+            preview.style.fontSize = size + 'px';
+            preview.style.color = color;
+            preview.style.background = bg;
+            preview.textContent = text;
+        };
+        window.updatePosterFromHex = function() {
+            const cv = document.getElementById('posterColorHex').value;
+            const bv = document.getElementById('posterBgHex').value;
+            if (/^#[0-9a-fA-F]{6}$/.test(cv)) document.getElementById('posterColor').value = cv;
+            if (/^#[0-9a-fA-F]{6}$/.test(bv)) document.getElementById('posterBg').value = bv;
+            updatePosterPreview();
+        };
+        window.downloadPoster = function() {
+            const text = document.getElementById('posterText').value.trim();
+            if (!text) { alert('请先输入大字报内容！'); return; }
+            const preview = document.getElementById('posterPreview');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1200;
+            canvas.height = 800;
+            ctx.fillStyle = preview.style.background || '#0a0e1c';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const fontSize = parseInt(document.getElementById('posterSize').value) * 1.5;
+            ctx.font = 'bold ' + fontSize + 'px ' + document.getElementById('posterFont').value.split(',')[0].replace(/'/g,'');
+            ctx.fillStyle = document.getElementById('posterColor').value;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            // 自动换行
+            const maxWidth = canvas.width - 80;
+            const lines = [];
+            let currentLine = '';
+            for (let i = 0; i < text.length; i++) {
+                const testLine = currentLine + text[i];
+                if (ctx.measureText(testLine).width > maxWidth) {
+                    lines.push(currentLine);
+                    currentLine = text[i];
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            if (currentLine) lines.push(currentLine);
+            const lineHeight = fontSize * 1.4;
+            const startY = canvas.height / 2 - (lines.length - 1) * lineHeight / 2;
+            lines.forEach((line, idx) => {
+                ctx.fillText(line, canvas.width / 2, startY + idx * lineHeight);
+            });
+            const link = document.createElement('a');
+            link.download = '大字报.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+        window.clearPoster = function() {
+            document.getElementById('posterText').value = '';
+            updatePosterPreview();
+        };
+
+        // ============ 随机抽取系统 ============
+        const STUDENTS = [
+            {id:'2412029',name:'张嘉怡'},{id:'2412021',name:'彭馥熙'},{id:'2412050',name:'陈盛英姿'},
+            {id:'2412012',name:'莫亚瑄'},{id:'2412015',name:'秦振浩'},{id:'2412016',name:'黎宇轩'},
+            {id:'2412001',name:'梁竣皓'},{id:'2412030',name:'欧阳元宣'},{id:'2412022',name:'文学邦'},
+            {id:'2412047',name:'何思含'},{id:'2412018',name:'韦勇贤'},{id:'2412013',name:'蒋昕妤'},
+            {id:'2412020',name:'唐亚琳'},{id:'2412010',name:'苏秋薇'},{id:'2412005',name:'姜子谦'},
+            {id:'2412034',name:'朱蒙煜'},{id:'2412046',name:'谢昀作'},{id:'2412048',name:'石浩宇'},
+            {id:'2412038',name:'杨予涵'},{id:'2412036',name:'经筱慧'},{id:'2412002',name:'陈俊翰'},
+            {id:'2412008',name:'陶霭帆'},{id:'2412026',name:'张桂诚'},{id:'2412017',name:'莫梓睿'},
+            {id:'2412033',name:'朱怡萱'},{id:'2412041',name:'赵壹晨'},{id:'2412039',name:'刘科言'},
+            {id:'2412007',name:'黄海燕'},{id:'2412028',name:'刘耀辉'},{id:'2412011',name:'唐振博'},
+            {id:'2412045',name:'李语琴'},{id:'2412035',name:'唐祺顺'},{id:'2412023',name:'唐嘉敏'},
+            {id:'2412044',name:'唐梓屹'},{id:'2412032',name:'陈泓烨'},{id:'2412051',name:'唐志斌'},
+            {id:'2412052',name:'潘凯文'},{id:'2412053',name:'车子墨'},{id:'2412054',name:'潘思丞'},
+            {id:'2412055',name:'白璐'},{id:'2412056',name:'黑璐'},{id:'2412057',name:'小白璐子'},
+            {id:'2412058',name:'白小璐'}
+        ];
+        let pickerRunning = false;
+        let pickerTimer = null;
+        let drawnStudents = new Set();
+
+        function initPickerGrid() {
+            const grid = document.getElementById('pickerGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            STUDENTS.forEach((s, i) => {
+                const div = document.createElement('div');
+                div.className = 'picker-grid-item';
+                div.id = 'grid-' + i;
+                div.textContent = s.name;
+                grid.appendChild(div);
+            });
+        }
+
+        function createParticles() {
+            const container = document.getElementById('pickerParticles');
+            container.innerHTML = '';
+            const colors = ['#f7e3b0','#e3b968','#8db6f7','#7fd6a4','#f2836f','#f0b45f','#c69a45'];
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'picker-particle';
+                const size = 4 + Math.random() * 10;
+                const tx = (Math.random() - 0.5) * 300;
+                const ty = (Math.random() - 0.5) * 300;
+                p.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + (40 + Math.random()*20) + '%;top:' + (40 + Math.random()*20) + '%;background:' + colors[Math.floor(Math.random()*colors.length)] + ';--tx:' + tx + 'px;--ty:' + ty + 'px;animation-delay:' + (Math.random()*0.5) + 's;';
+                container.appendChild(p);
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#f7e3b0','#e3b968','#8db6f7','#7fd6a4','#f2836f','#f0b45f','#c69a45','#ff6b9d','#c44dff'];
+            for (let i = 0; i < 50; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'picker-confetti-piece';
+                const size = 6 + Math.random() * 10;
+                const isCircle = Math.random() > 0.5;
+                piece.style.cssText = 'width:' + size + 'px;height:' + (isCircle ? size : size*2) + 'px;left:' + Math.random()*100 + 'vw;top:-20px;background:' + colors[Math.floor(Math.random()*colors.length)] + ';border-radius:' + (isCircle ? '50%' : '2px') + ';animation-delay:' + (Math.random()*1.5) + 's;animation-duration:' + (2 + Math.random()*2) + 's;';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 4000);
+            }
+        }
+
+        window.startPicker = function() {
+            if (pickerRunning) return;
+            if (drawnStudents.size >= STUDENTS.length) {
+                alert('所有同学都已被抽取过，请点击"重置"重新开始！');
+                return;
+            }
+            pickerRunning = true;
+            const nameEl = document.getElementById('pickerName');
+            const btn = document.getElementById('pickerBtn');
+            btn.textContent = '抽取中...';
+            btn.style.opacity = '0.7';
+            nameEl.classList.remove('winner');
+            nameEl.classList.add('cycling');
+            // 清除之前的grid高亮
+            document.querySelectorAll('.picker-grid-item').forEach(el => el.classList.remove('highlight','winner-item'));
+
+            let cycleCount = 0;
+            const totalCycles = 30 + Math.floor(Math.random() * 20);
+            let interval = 60;
+
+            function cycle() {
+                const idx = Math.floor(Math.random() * STUDENTS.length);
+                nameEl.innerHTML = STUDENTS[idx].name + '<span class="picker-id">' + STUDENTS[idx].id + '</span>';
+                // 高亮grid
+                document.querySelectorAll('.picker-grid-item.highlight').forEach(el => el.classList.remove('highlight'));
+                const gridItem = document.getElementById('grid-' + idx);
+                if (gridItem) gridItem.classList.add('highlight');
+
+                cycleCount++;
+                if (cycleCount >= totalCycles) {
+                    // 选中未被抽取的同学
+                    let finalIdx;
+                    do {
+                        finalIdx = Math.floor(Math.random() * STUDENTS.length);
+                    } while (drawnStudents.has(finalIdx));
+                    drawnStudents.add(finalIdx);
+                    nameEl.classList.remove('cycling');
+                    nameEl.classList.add('winner');
+                    nameEl.innerHTML = STUDENTS[finalIdx].name + '<span class="picker-id">' + STUDENTS[finalIdx].id + '</span>';
+                    // 高亮最终选中
+                    document.querySelectorAll('.picker-grid-item.highlight').forEach(el => el.classList.remove('highlight'));
+                    const finalGridItem = document.getElementById('grid-' + finalIdx);
+                    if (finalGridItem) finalGridItem.classList.add('winner-item');
+                    // 粒子特效
+                    createParticles();
+                    createConfetti();
+                    pickerRunning = false;
+                    btn.textContent = '再次抽取';
+                    btn.style.opacity = '1';
+                } else {
+                    interval = 60 + Math.floor(cycleCount * cycleCount * 0.15);
+                    pickerTimer = setTimeout(cycle, interval);
+                }
+            }
+            cycle();
+        };
+
+        window.resetPicker = function() {
+            if (pickerTimer) clearTimeout(pickerTimer);
+            pickerRunning = false;
+            drawnStudents.clear();
+            const nameEl = document.getElementById('pickerName');
+            nameEl.classList.remove('cycling','winner');
+            nameEl.textContent = '点击按钮开始';
+            const btn = document.getElementById('pickerBtn');
+            btn.textContent = '开始抽取';
+            btn.style.opacity = '1';
+            document.querySelectorAll('.picker-grid-item').forEach(el => el.classList.remove('highlight','winner-item'));
+            document.getElementById('pickerParticles').innerHTML = '';
+        };
+
+        // 初始化大字报预览和抽取系统
+        updatePosterPreview();
+        initPickerGrid();
 
     </script>
 </body>
