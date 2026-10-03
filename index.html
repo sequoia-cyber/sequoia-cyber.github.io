@@ -453,6 +453,9 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
 .menu-panel.active .menu-link:nth-child(4) { transition: all 0.35s ease 0.24s; }
 .menu-panel.active .menu-link:nth-child(5) { transition: all 0.35s ease 0.30s; }
 .menu-panel.active .menu-link:nth-child(6) { transition: all 0.35s ease 0.36s; }
+.menu-panel.active .menu-link:nth-child(7) { transition: all 0.35s ease 0.42s; }
+.menu-panel.active .menu-link:nth-child(8) { transition: all 0.35s ease 0.48s; }
+.menu-panel.active .menu-link:nth-child(9) { transition: all 0.35s ease 0.54s; }
 
 .menu-icon {
     width: 36px;
@@ -1041,6 +1044,200 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
 .picker-confetti-piece { position:fixed; width:10px; height:10px; animation:confettiFall 2.5s ease-out forwards; }
 @keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
 
+/* SECTION: games 小游戏页面 */
+.password-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10,14,28,0.92); z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(12px);
+}
+.password-overlay.hidden { display: none; }
+.password-box {
+    background: var(--panel-bg); border: 1px solid var(--stroke-gold);
+    border-radius: var(--radius); padding: 40px 36px; text-align: center;
+    max-width: 360px; width: 90%; box-shadow: var(--shadow);
+}
+.password-box h3 { color: var(--gold-1); margin-bottom: 16px; font-size: 1.3rem; }
+.password-box input {
+    width: 100%; padding: 12px 16px; border-radius: 12px;
+    border: 1px solid var(--stroke); background: var(--glass-strong);
+    color: var(--text); font-size: 1rem; text-align: center;
+    outline: none; margin-bottom: 16px; box-sizing: border-box;
+}
+.password-box input:focus { border-color: var(--accent); }
+.password-box .pwd-error { color: var(--red); font-size: 0.85rem; margin-bottom: 10px; min-height: 1.2em; }
+.game-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; justify-content: center; }
+.game-tab-btn {
+    padding: 10px 20px; border-radius: 12px; border: 1px solid var(--stroke);
+    background: var(--glass); color: var(--text-dim); cursor: pointer;
+    font-size: 0.95rem; transition: all 0.25s ease;
+}
+.game-tab-btn:hover { border-color: var(--stroke-gold); color: var(--accent); }
+.game-tab-btn.active {
+    background: linear-gradient(135deg, var(--accent-soft), transparent);
+    border-color: var(--stroke-gold); color: var(--accent); font-weight: 600;
+}
+.game-container { display: none; flex-direction: column; align-items: center; }
+.game-container.active { display: flex; }
+.game-info-bar {
+    display: flex; gap: 18px; margin-bottom: 12px; flex-wrap: wrap; justify-content: center;
+    font-size: 0.95rem; color: var(--gold-1);
+}
+.game-info-bar span { background: var(--glass); padding: 6px 14px; border-radius: 10px; border: 1px solid var(--stroke); }
+.game-btn {
+    padding: 10px 28px; border-radius: 12px; border: 1px solid var(--stroke-gold);
+    background: var(--accent-soft); color: var(--accent); cursor: pointer;
+    font-size: 1rem; margin-top: 12px; transition: all 0.25s ease;
+}
+.game-btn:hover { background: var(--accent); color: var(--bg-1); }
+/* Minesweeper */
+.ms-grid {
+    display: grid; grid-template-columns: repeat(10, 32px); grid-template-rows: repeat(10, 32px);
+    gap: 2px; margin: 10px auto; user-select: none;
+}
+.ms-cell {
+    width: 32px; height: 32px; background: var(--glass-strong); border: 1px solid var(--stroke);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.15s;
+}
+.ms-cell:hover { background: var(--accent-soft); }
+.ms-cell.revealed { background: var(--bg-2); cursor: default; }
+.ms-cell.mine { background: var(--red); color: #fff; }
+.ms-cell.flagged { color: var(--amber); }
+.ms-cell[data-num="1"] { color: var(--blue); }
+.ms-cell[data-num="2"] { color: var(--green); }
+.ms-cell[data-num="3"] { color: var(--red); }
+.ms-cell[data-num="4"] { color: var(--gold-2); }
+.ms-cell[data-num="5"] { color: var(--amber); }
+/* Tetris */
+.tetris-wrapper { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+.tetris-canvas { border: 2px solid var(--stroke-gold); border-radius: 8px; background: var(--bg-2); }
+.tetris-side { display: flex; flex-direction: column; gap: 10px; min-width: 100px; }
+.tetris-side .info-label { font-size: 0.8rem; color: var(--text-dim); }
+.tetris-side .info-value { font-size: 1.2rem; color: var(--gold-1); font-weight: 700; }
+/* PvZ */
+.pvz-wrapper { position: relative; }
+.pvz-grid {
+    display: grid; grid-template-columns: repeat(9, 48px); grid-template-rows: repeat(5, 48px);
+    gap: 2px; margin: 10px auto; background: var(--bg-2); padding: 4px; border-radius: 8px;
+    border: 1px solid var(--stroke);
+}
+.pvz-cell {
+    width: 48px; height: 48px; background: var(--glass); border: 1px solid var(--stroke);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; cursor: pointer; position: relative; transition: background 0.15s;
+}
+.pvz-cell:hover { background: var(--accent-soft); }
+.pvz-toolbar {
+    display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; justify-content: center;
+}
+.pvz-plant-btn {
+    padding: 6px 14px; border-radius: 10px; border: 1px solid var(--stroke);
+    background: var(--glass); color: var(--text-dim); cursor: pointer;
+    font-size: 0.85rem; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+}
+.pvz-plant-btn:hover { border-color: var(--stroke-gold); }
+.pvz-plant-btn.selected { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.pvz-plant-btn.disabled { opacity: 0.4; cursor: not-allowed; }
+.pvz-sun-display { font-size: 1.1rem; color: var(--amber); font-weight: 700; }
+.pvz-sun-float {
+    position: absolute; width: 36px; height: 36px; background: radial-gradient(circle, #ffe066, #f0b45f);
+    border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; animation: sunFloat 3s ease-in-out infinite; box-shadow: 0 0 12px rgba(240,180,95,0.5);
+}
+@keyframes sunFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.pvz-bullet {
+    position: absolute; width: 8px; height: 8px; background: var(--green);
+    border-radius: 50%; z-index: 5;
+}
+.pvz-zombie {
+    position: absolute; font-size: 1.3rem; z-index: 6; transition: left 0.1s linear;
+}
+
+/* SECTION: words 好词积累器 */
+.words-search-bar {
+    width: 100%; max-width: 400px; margin: 0 auto 18px; position: relative;
+}
+.words-search-bar input {
+    width: 100%; padding: 12px 18px 12px 40px; border-radius: 14px;
+    border: 1px solid var(--stroke); background: var(--glass-strong);
+    color: var(--text); font-size: 1rem; outline: none; box-sizing: border-box;
+}
+.words-search-bar input:focus { border-color: var(--accent); }
+.words-search-bar::before {
+    content: '🔍'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 1rem; opacity: 0.6;
+}
+.words-categories {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 18px;
+}
+.words-cat-btn {
+    padding: 7px 16px; border-radius: 10px; border: 1px solid var(--stroke);
+    background: var(--glass); color: var(--text-dim); cursor: pointer;
+    font-size: 0.85rem; transition: all 0.2s;
+}
+.words-cat-btn:hover { border-color: var(--stroke-gold); color: var(--accent); }
+.words-cat-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.words-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px; width: 100%;
+}
+.word-card {
+    background: var(--glass-strong); border: 1px solid var(--stroke);
+    border-radius: 14px; padding: 18px 14px; text-align: center;
+    cursor: pointer; transition: all 0.25s ease; position: relative; overflow: hidden;
+}
+.word-card:hover { border-color: var(--stroke-gold); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+.word-card .word-text { font-size: 1.15rem; color: var(--gold-1); font-weight: 700; margin-bottom: 6px; }
+.word-card .word-meaning { font-size: 0.78rem; color: var(--text-dim); line-height: 1.4; }
+.word-card .word-cat-tag {
+    position: absolute; top: 6px; right: 8px; font-size: 0.65rem;
+    color: var(--accent); opacity: 0.7;
+}
+.word-card.copied { border-color: var(--green); }
+.word-card.copied::after {
+    content: '已复制'; position: absolute; bottom: 6px; right: 8px;
+    font-size: 0.7rem; color: var(--green);
+}
+
+/* SECTION: reaction 反应时间测试器 */
+.reaction-area {
+    width: 100%; max-width: 500px; height: 300px; margin: 18px auto;
+    border-radius: var(--radius); display: flex; align-items: center; justify-content: center;
+    flex-direction: column; cursor: pointer; user-select: none;
+    transition: background 0.2s; border: 2px solid var(--stroke);
+    position: relative; overflow: hidden;
+}
+.reaction-area.state-idle { background: var(--glass-strong); }
+.reaction-area.state-waiting { background: rgba(242,131,111,0.25); border-color: var(--red); }
+.reaction-area.state-ready { background: rgba(127,214,164,0.3); border-color: var(--green); }
+.reaction-area.state-result { background: var(--glass-strong); border-color: var(--gold-2); }
+.reaction-area.state-early { background: rgba(242,131,111,0.15); border-color: var(--red); }
+.reaction-text { font-size: 1.4rem; color: var(--text); font-weight: 700; text-align: center; padding: 0 20px; }
+.reaction-sub { font-size: 0.9rem; color: var(--text-dim); margin-top: 8px; }
+.reaction-stats {
+    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin: 14px 0;
+}
+.reaction-stat {
+    background: var(--glass); border: 1px solid var(--stroke); border-radius: 12px;
+    padding: 10px 18px; text-align: center; min-width: 100px;
+}
+.reaction-stat .stat-label { font-size: 0.75rem; color: var(--text-dim); }
+.reaction-stat .stat-value { font-size: 1.3rem; color: var(--gold-1); font-weight: 700; }
+.reaction-chart {
+    width: 100%; max-width: 500px; margin: 14px auto; display: flex;
+    align-items: flex-end; gap: 4px; height: 120px; padding: 0 10px;
+}
+.reaction-bar {
+    flex: 1; background: var(--accent-soft); border: 1px solid var(--stroke-gold);
+    border-radius: 4px 4px 0 0; min-width: 12px; position: relative;
+    transition: height 0.3s ease;
+}
+.reaction-bar .bar-val {
+    position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 0.65rem; color: var(--text-dim); white-space: nowrap;
+}
+
 /* SECTION: responsive 小屏适配 */
 @media screen and (max-width: 768px) {
     .ticker-bar { height: 38px; }
@@ -1151,6 +1348,15 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
             </a>
             <a href="#" class="menu-link" data-page="picker">
                 <span class="menu-icon">⚅</span> 随机抽取系统
+            </a>
+            <a href="#" class="menu-link" data-page="games">
+                <span class="menu-icon">🎮</span> 小游戏
+            </a>
+            <a href="#" class="menu-link" data-page="words">
+                <span class="menu-icon">📖</span> 好词积累
+            </a>
+            <a href="#" class="menu-link" data-page="reaction">
+                <span class="menu-icon">⚡</span> 反应测试
             </a>
         </nav>
         <div class="menu-footer">学不可以已 · 荀子</div>
@@ -1264,7 +1470,11 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
                             <option value="'FangSong', serif">仿宋</option>
                             <option value="'STZhongsong', serif">华文中宋</option>
                             <option value="'STSong', serif">华文宋体</option>
+                            <option value="'STYaoTi', '方正姚体', '华文新魏', serif">方正姚体</option>
                         </select>
+                    </div>
+                    <div class="poster-control-group" style="display:flex;align-items:flex-end;">
+                        <button class="game-btn" style="margin-top:0;padding:8px 16px;font-size:0.85rem;" onclick="document.getElementById('posterFont').value=\"'STYaoTi', '方正姚体', '华文新魏', serif\";updatePosterPreview()">方正姚体</button>
                     </div>
                     <div class="poster-control-group">
                         <label>字体大小</label>
@@ -1318,6 +1528,109 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
             <div class="info-card">
                 <h3>班级同学列表（共41人）</h3>
                 <div id="pickerGrid" class="picker-grid"></div>
+            </div>
+        </div>
+    </div>
+    <!-- SECTION: page-games 小游戏 -->
+    <div id="page-games" class="page-section">
+        <div class="content-box">
+            <div class="eyebrow">MINI GAMES · 休闲娱乐</div>
+            <div class="main-text page-title accent-blue">小游戏</div>
+            <div class="sub-text"><p>选择一款游戏，放松一下吧！</p></div>
+            <div class="game-tabs">
+                <button class="game-tab-btn active" onclick="switchGameTab('minesweeper',this)">💣 挖雷</button>
+                <button class="game-tab-btn" onclick="switchGameTab('tetris',this)">🧱 俄罗斯方块</button>
+                <button class="game-tab-btn" onclick="switchGameTab('pvz',this)">🌻 植物大战僵尸</button>
+            </div>
+            <!-- Minesweeper -->
+            <div id="game-minesweeper" class="game-container active">
+                <div class="game-info-bar">
+                    <span>💣 剩余: <b id="ms-mine-count">15</b></span>
+                    <span>⏱️ 时间: <b id="ms-timer">0</b>s</span>
+                </div>
+                <div class="ms-grid" id="ms-grid"></div>
+                <button class="game-btn" onclick="initMinesweeper()">重新开始</button>
+            </div>
+            <!-- Tetris -->
+            <div id="game-tetris" class="game-container">
+                <div class="tetris-wrapper">
+                    <canvas id="tetris-canvas" class="tetris-canvas" width="240" height="480"></canvas>
+                    <div class="tetris-side">
+                        <div><div class="info-label">分数</div><div class="info-value" id="tetris-score">0</div></div>
+                        <div><div class="info-label">等级</div><div class="info-value" id="tetris-level">1</div></div>
+                        <div><div class="info-label">行数</div><div class="info-value" id="tetris-lines">0</div></div>
+                        <button class="game-btn" style="margin-top:18px;" onclick="startTetris()" id="tetris-start-btn">开始游戏</button>
+                    </div>
+                </div>
+            </div>
+            <!-- PvZ -->
+            <div id="game-pvz" class="game-container">
+                <div class="pvz-toolbar">
+                    <button class="pvz-plant-btn" onclick="selectPvzPlant('sunflower')" id="pvz-btn-sunflower">🌻 向日葵 (50)</button>
+                    <button class="pvz-plant-btn" onclick="selectPvzPlant('peashooter')" id="pvz-btn-peashooter">🫛 豌豆射手 (100)</button>
+                    <button class="pvz-plant-btn" onclick="selectPvzPlant('wallnut')" id="pvz-btn-wallnut">🥜 坚果墙 (50)</button>
+                    <div class="pvz-sun-display">☀️ <span id="pvz-sun">150</span></div>
+                </div>
+                <div class="game-info-bar">
+                    <span>🌊 波次: <b id="pvz-wave">0</b>/10</span>
+                    <span>🧟 剩余: <b id="pvz-zombies-left">0</b></span>
+                </div>
+                <div class="pvz-wrapper" id="pvz-wrapper">
+                    <div class="pvz-grid" id="pvz-grid"></div>
+                </div>
+                <button class="game-btn" onclick="initPvZ()">重新开始</button>
+            </div>
+        </div>
+    </div>
+    <!-- Password overlay for games -->
+    <div class="password-overlay hidden" id="games-password-overlay">
+        <div class="password-box">
+            <h3>🔒 请输入密码</h3>
+            <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:14px;">小游戏需要密码才能进入</p>
+            <input type="password" id="games-pwd-input" placeholder="输入密码..." onkeydown="if(event.key==='Enter')checkGamesPassword()">
+            <div class="pwd-error" id="games-pwd-error"></div>
+            <button class="game-btn" onclick="checkGamesPassword()">确认</button>
+            <button class="game-btn" style="background:transparent;border-color:var(--stroke);color:var(--text-dim);margin-left:8px;" onclick="document.getElementById('games-password-overlay').classList.add('hidden');switchPage('home')">返回</button>
+        </div>
+    </div>
+    <!-- SECTION: page-words 好词积累器 -->
+    <div id="page-words" class="page-section">
+        <div class="content-box">
+            <div class="eyebrow">CLASSICAL WORDS · 文言雅词</div>
+            <div class="main-text page-title">好词积累器</div>
+            <div class="sub-text"><p>点击卡片即可复制词语，积累文言好词提升文采</p></div>
+            <div class="words-search-bar">
+                <input type="text" id="words-search" placeholder="搜索词语或释义..." oninput="filterWords()">
+            </div>
+            <div class="words-categories" id="words-categories">
+                <button class="words-cat-btn active" onclick="filterWordsByCat('all')">全部</button>
+                <button class="words-cat-btn" onclick="filterWordsByCat('思考类')">思考类</button>
+                <button class="words-cat-btn" onclick="filterWordsByCat('时间类')">时间类</button>
+                <button class="words-cat-btn" onclick="filterWordsByCat('情感类')">情感类</button>
+                <button class="words-cat-btn" onclick="filterWordsByCat('动作类')">动作类</button>
+                <button class="words-cat-btn" onclick="filterWordsByCat('描写类')">描写类</button>
+            </div>
+            <div class="words-grid" id="words-grid"></div>
+        </div>
+    </div>
+    <!-- SECTION: page-reaction 反应时间测试器 -->
+    <div id="page-reaction" class="page-section">
+        <div class="content-box">
+            <div class="eyebrow">REACTION TEST · 反应速度</div>
+            <div class="main-text page-title accent-green">反应时间测试器</div>
+            <div class="sub-text"><p>测试你的反应速度，毫秒级精准计时</p></div>
+            <div class="reaction-area state-idle" id="reaction-area" onclick="handleReactionClick()">
+                <div class="reaction-text" id="reaction-text">点击此处开始测试</div>
+                <div class="reaction-sub" id="reaction-sub">等待变绿后尽快点击</div>
+            </div>
+            <div class="reaction-stats">
+                <div class="reaction-stat"><div class="stat-label">最佳成绩</div><div class="stat-value" id="reaction-best">-</div></div>
+                <div class="reaction-stat"><div class="stat-label">最近5次平均</div><div class="stat-value" id="reaction-avg">-</div></div>
+                <div class="reaction-stat"><div class="stat-label">尝试次数</div><div class="stat-value" id="reaction-count">0</div></div>
+            </div>
+            <div class="reaction-chart" id="reaction-chart"></div>
+            <div class="btn-group" style="margin-top:14px;">
+                <button class="btn btn-ghost" onclick="resetReaction()">重置记录</button>
             </div>
         </div>
     </div>
@@ -2477,9 +2790,595 @@ body.theme-green .menu-overlay { background: rgba(20, 45, 25, 0.25); }
             document.getElementById('pickerParticles').innerHTML = '';
         };
 
+        // ============ 小游戏密码门 ============
+        var gamesUnlocked = false;
+        function checkGamesPassword() {
+            var input = document.getElementById('games-pwd-input');
+            var errorEl = document.getElementById('games-pwd-error');
+            if (input.value === '114514') {
+                gamesUnlocked = true;
+                document.getElementById('games-password-overlay').classList.add('hidden');
+                input.value = '';
+                errorEl.textContent = '';
+            } else {
+                errorEl.textContent = '密码错误，请重试';
+                input.value = '';
+                input.focus();
+            }
+        }
+        // 拦截游戏页面访问
+        var origSwitchPage = switchPage;
+        switchPage = function(pageId) {
+            if (pageId === 'games' && !gamesUnlocked) {
+                closeMenu();
+                document.querySelectorAll('.menu-link').forEach(function(l){l.classList.remove('active');});
+                var gl = document.querySelector('.menu-link[data-page="games"]');
+                if(gl) gl.classList.add('active');
+                document.getElementById('games-password-overlay').classList.remove('hidden');
+                setTimeout(function(){document.getElementById('games-pwd-input').focus();},100);
+                return;
+            }
+            origSwitchPage(pageId);
+        };
+        // Original menu link handlers already reference switchPage by name,
+        // so the global reassignment above is sufficient — no re-bind needed.
+
+        // ============ 游戏标签切换 ============
+        window.switchGameTab = function(game, btnEl) {
+            document.querySelectorAll('.game-tab-btn').forEach(function(b){b.classList.remove('active');});
+            document.querySelectorAll('.game-container').forEach(function(c){c.classList.remove('active');});
+            if(btnEl) btnEl.classList.add('active');
+            document.getElementById('game-' + game).classList.add('active');
+            // Stop other games
+            stopTetris();
+            stopPvZ();
+        };
+
+        // ============ 挖雷 (Minesweeper) ============
+        var msBoard = [], msRevealed = [], msFlagged = [], msGameOver = false, msTimerInterval = null, msTime = 0, msMinesLeft = 15;
+        var MS_ROWS = 10, MS_COLS = 10, MS_MINES = 15;
+
+        window.initMinesweeper = function() {
+            if (msTimerInterval) clearInterval(msTimerInterval);
+            msGameOver = false; msTime = 0; msMinesLeft = MS_MINES;
+            document.getElementById('ms-timer').textContent = '0';
+            document.getElementById('ms-mine-count').textContent = MS_MINES;
+            msBoard = []; msRevealed = []; msFlagged = [];
+            for (var r = 0; r < MS_ROWS; r++) {
+                msBoard[r] = []; msRevealed[r] = []; msFlagged[r] = [];
+                for (var c = 0; c < MS_COLS; c++) { msBoard[r][c] = 0; msRevealed[r][c] = false; msFlagged[r][c] = false; }
+            }
+            // Place mines
+            var placed = 0;
+            while (placed < MS_MINES) {
+                var rr = Math.floor(Math.random() * MS_ROWS), cc = Math.floor(Math.random() * MS_COLS);
+                if (msBoard[rr][cc] !== -1) { msBoard[rr][cc] = -1; placed++; }
+            }
+            // Calc numbers
+            for (var r2 = 0; r2 < MS_ROWS; r2++) {
+                for (var c2 = 0; c2 < MS_COLS; c2++) {
+                    if (msBoard[r2][c2] === -1) continue;
+                    var cnt = 0;
+                    for (var dr = -1; dr <= 1; dr++) for (var dc = -1; dc <= 1; dc++) {
+                        var nr = r2+dr, nc = c2+dc;
+                        if (nr>=0 && nr<MS_ROWS && nc>=0 && nc<MS_COLS && msBoard[nr][nc]===-1) cnt++;
+                    }
+                    msBoard[r2][c2] = cnt;
+                }
+            }
+            renderMsGrid();
+            msTimerInterval = setInterval(function(){ msTime++; document.getElementById('ms-timer').textContent = msTime; }, 1000);
+        };
+
+        function renderMsGrid() {
+            var grid = document.getElementById('ms-grid');
+            grid.innerHTML = '';
+            for (var r = 0; r < MS_ROWS; r++) {
+                for (var c = 0; c < MS_COLS; c++) {
+                    var cell = document.createElement('div');
+                    cell.className = 'ms-cell';
+                    cell.dataset.r = r; cell.dataset.c = c;
+                    if (msRevealed[r][c]) {
+                        cell.classList.add('revealed');
+                        if (msBoard[r][c] === -1) { cell.classList.add('mine'); cell.textContent = '💣'; }
+                        else if (msBoard[r][c] > 0) { cell.textContent = msBoard[r][c]; cell.dataset.num = msBoard[r][c]; }
+                    } else if (msFlagged[r][c]) {
+                        cell.classList.add('flagged'); cell.textContent = '🚩';
+                    }
+                    cell.addEventListener('click', function(){ msClick(parseInt(this.dataset.r), parseInt(this.dataset.c)); });
+                    cell.addEventListener('contextmenu', function(e){ e.preventDefault(); msRightClick(parseInt(this.dataset.r), parseInt(this.dataset.c)); });
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        function msClick(r, c) {
+            if (msGameOver || msFlagged[r][c] || msRevealed[r][c]) return;
+            if (msBoard[r][c] === -1) {
+                msGameOver = true; clearInterval(msTimerInterval);
+                msRevealed[r][c] = true; renderMsGrid();
+                alert('💥 踩到地雷了！游戏结束！用时 ' + msTime + '秒');
+                return;
+            }
+            revealCell(r, c);
+            renderMsGrid();
+            checkMsWin();
+        }
+
+        function revealCell(r, c) {
+            if (r<0||r>=MS_ROWS||c<0||c>=MS_COLS||msRevealed[r][c]||msFlagged[r][c]) return;
+            msRevealed[r][c] = true;
+            if (msBoard[r][c] === 0) {
+                for (var dr=-1;dr<=1;dr++) for(var dc=-1;dc<=1;dc++) revealCell(r+dr,c+dc);
+            }
+        }
+
+        function msRightClick(r, c) {
+            if (msGameOver || msRevealed[r][c]) return;
+            msFlagged[r][c] = !msFlagged[r][c];
+            msMinesLeft += msFlagged[r][c] ? -1 : 1;
+            document.getElementById('ms-mine-count').textContent = msMinesLeft;
+            renderMsGrid();
+        }
+
+        function checkMsWin() {
+            var unrevealed = 0;
+            for (var r=0;r<MS_ROWS;r++) for(var c=0;c<MS_COLS;c++) if(!msRevealed[r][c]) unrevealed++;
+            if (unrevealed === MS_MINES) {
+                msGameOver = true; clearInterval(msTimerInterval);
+                alert('🎉 恭喜通关！用时 ' + msTime + '秒');
+            }
+        }
+
+        // ============ 俄罗斯方块 (Tetris) ============
+        var tetCanvas, tetCtx, tetBoard, tetPiece, tetNextPiece, tetScore=0, tetLines=0, tetLevel=1;
+        var tetInterval=null, tetRunning=false, tetGameOver=false;
+        var TET_ROWS=20, TET_COLS=10, TET_SIZE=24;
+        var TET_SHAPES = [
+            [[1,1,1,1]], // I
+            [[1,1],[1,1]], // O
+            [[0,1,0],[1,1,1]], // T
+            [[0,1,1],[1,1,0]], // S
+            [[1,1,0],[0,1,1]], // Z
+            [[1,0,0],[1,1,1]], // J
+            [[0,0,1],[1,1,1]]  // L
+        ];
+        var TET_COLORS = ['#00f0f0','#f0f000','#a000f0','#00f000','#f00000','#0000f0','#f0a000'];
+
+        window.startTetris = function() {
+            if (tetRunning) { stopTetris(); return; }
+            tetCanvas = document.getElementById('tetris-canvas');
+            tetCtx = tetCanvas.getContext('2d');
+            tetBoard = [];
+            for(var r=0;r<TET_ROWS;r++){tetBoard[r]=[];for(var c=0;c<TET_COLS;c++)tetBoard[r][c]=0;}
+            tetScore=0;tetLines=0;tetLevel=1;tetGameOver=false;tetRunning=true;
+            document.getElementById('tetris-score').textContent='0';
+            document.getElementById('tetris-level').textContent='1';
+            document.getElementById('tetris-lines').textContent='0';
+            document.getElementById('tetris-start-btn').textContent='暂停';
+            spawnTetPiece();
+            tetLoop();
+        };
+
+        window.stopTetris = function() {
+            tetRunning=false;
+            if(tetInterval){clearTimeout(tetInterval);tetInterval=null;}
+            document.getElementById('tetris-start-btn').textContent='开始游戏';
+        };
+
+        function spawnTetPiece() {
+            var idx = Math.floor(Math.random()*7);
+            var shape = TET_SHAPES[idx].map(function(row){return row.slice();});
+            tetPiece = {shape:shape, color:TET_COLORS[idx], x:Math.floor((TET_COLS-shape[0].length)/2), y:0};
+            if(tetCollides(tetPiece.shape,tetPiece.x,tetPiece.y)){tetGameOver=true;tetRunning=false;alert('游戏结束！得分：'+tetScore);document.getElementById('tetris-start-btn').textContent='开始游戏';}
+        }
+
+        function tetCollides(shape,px,py) {
+            for(var r=0;r<shape.length;r++)for(var c=0;c<shape[r].length;c++){
+                if(!shape[r][c])continue;
+                var nx=px+c,ny=py+r;
+                if(nx<0||nx>=TET_COLS||ny>=TET_ROWS)return true;
+                if(ny>=0&&tetBoard[ny][nx])return true;
+            }
+            return false;
+        }
+
+        function tetLock() {
+            for(var r=0;r<tetPiece.shape.length;r++)for(var c=0;c<tetPiece.shape[r].length;c++){
+                if(tetPiece.shape[r][c]&&tetPiece.y+r>=0)tetBoard[tetPiece.y+r][tetPiece.x+c]=tetPiece.color;
+            }
+            // Clear lines
+            var cleared=0;
+            for(var r2=TET_ROWS-1;r2>=0;r2--){
+                if(tetBoard[r2].every(function(v){return v!==0;})){
+                    tetBoard.splice(r2,1);
+                    tetBoard.unshift(new Array(TET_COLS).fill(0));
+                    cleared++;r2++;
+                }
+            }
+            if(cleared){
+                tetLines+=cleared;
+                tetScore+=cleared*100*(cleared>1?cleared:1);
+                tetLevel=Math.floor(tetLines/10)+1;
+                document.getElementById('tetris-score').textContent=tetScore;
+                document.getElementById('tetris-level').textContent=tetLevel;
+                document.getElementById('tetris-lines').textContent=tetLines;
+            }
+            spawnTetPiece();
+        }
+
+        function tetRotate() {
+            var s=tetPiece.shape,rows=s.length,cols=s[0].length;
+            var ns=[];for(var c=0;c<cols;c++){ns[c]=[];for(var r=rows-1;r>=0;r--)ns[c].push(s[r][c]);}
+            if(!tetCollides(ns,tetPiece.x,tetPiece.y))tetPiece.shape=ns;
+        }
+
+        function tetMove(dx,dy) {
+            if(!tetCollides(tetPiece.shape,tetPiece.x+dx,tetPiece.y+dy)){tetPiece.x+=dx;tetPiece.y+=dy;return true;}
+            return false;
+        }
+
+        function tetHardDrop() {
+            while(tetMove(0,1)){}
+            tetLock();
+        }
+
+        function tetDraw() {
+            tetCtx.fillStyle='#121b36';tetCtx.fillRect(0,0,tetCanvas.width,tetCanvas.height);
+            // Board
+            for(var r=0;r<TET_ROWS;r++)for(var c=0;c<TET_COLS;c++){
+                if(tetBoard[r][c]){tetCtx.fillStyle=tetBoard[r][c];tetCtx.fillRect(c*TET_SIZE,r*TET_SIZE,TET_SIZE-1,TET_SIZE-1);}
+            }
+            // Piece
+            if(tetPiece){
+                tetCtx.fillStyle=tetPiece.color;
+                for(var r2=0;r2<tetPiece.shape.length;r2++)for(var c2=0;c2<tetPiece.shape[r2].length;c2++){
+                    if(tetPiece.shape[r2][c2])tetCtx.fillRect((tetPiece.x+c2)*TET_SIZE,(tetPiece.y+r2)*TET_SIZE,TET_SIZE-1,TET_SIZE-1);
+                }
+            }
+        }
+
+        function tetLoop() {
+            if(!tetRunning||tetGameOver)return;
+            if(!tetMove(0,1))tetLock();
+            tetDraw();
+            var speed=Math.max(100,500-tetLevel*40);
+            tetInterval=setTimeout(tetLoop,speed);
+        }
+
+        document.addEventListener('keydown',function(e){
+            if(!tetRunning||tetGameOver)return;
+            var activeGame=document.getElementById('game-tetris');
+            if(!activeGame.classList.contains('active'))return;
+            switch(e.key){
+                case'ArrowLeft':tetMove(-1,0);tetDraw();e.preventDefault();break;
+                case'ArrowRight':tetMove(1,0);tetDraw();e.preventDefault();break;
+                case'ArrowDown':tetMove(0,1);tetDraw();e.preventDefault();break;
+                case'ArrowUp':tetRotate();tetDraw();e.preventDefault();break;
+                case' ':tetHardDrop();tetDraw();e.preventDefault();break;
+            }
+        });
+
+        // ============ 植物大战僵尸 (Simplified PvZ) ============
+        var pvzGrid=[], pvzSun=150, pvzWave=0, pvzRunning=false, pvzSelectedPlant=null;
+        var pvzInterval=null, pvzSunInterval=null, pvzWaveInterval=null, pvzBulletInterval=null;
+        var PVZ_ROWS=5, PVZ_COLS=9, PVZ_MAX_WAVES=10;
+        var pvzZombies=[], pvzBullets=[], pvzSuns=[];
+
+        window.initPvZ = function() {
+            stopPvZ();
+            pvzSun=150;pvzWave=0;pvzRunning=true;pvzSelectedPlant=null;pvzZombies=[];pvzBullets=[];pvzSuns=[];
+            document.getElementById('pvz-sun').textContent=pvzSun;
+            document.getElementById('pvz-wave').textContent='0';
+            document.getElementById('pvz-zombies-left').textContent='0';
+            document.querySelectorAll('.pvz-plant-btn').forEach(function(b){b.classList.remove('selected','disabled');});
+            // Build grid
+            pvzGrid=[];
+            var gridEl=document.getElementById('pvz-grid');gridEl.innerHTML='';
+            // Remove old floating elements
+            var wrapper=document.getElementById('pvz-wrapper');
+            wrapper.querySelectorAll('.pvz-sun-float,.pvz-bullet,.pvz-zombie').forEach(function(el){el.remove();});
+            for(var r=0;r<PVZ_ROWS;r++){
+                pvzGrid[r]=[];
+                for(var c=0;c<PVZ_COLS;c++){
+                    pvzGrid[r][c]=null;
+                    var cell=document.createElement('div');cell.className='pvz-cell';
+                    cell.dataset.r=r;cell.dataset.c=c;
+                    cell.addEventListener('click',function(){pvzCellClick(parseInt(this.dataset.r),parseInt(this.dataset.c));});
+                    gridEl.appendChild(cell);
+                }
+            }
+            // Start loops
+            pvzSunInterval=setInterval(pvzSpawnSun,4000);
+            pvzWaveInterval=setInterval(pvzNextWave,8000);
+            pvzBulletInterval=setInterval(pvzGameTick,100);
+            pvzNextWave();
+        };
+
+        window.stopPvZ = function() {
+            pvzRunning=false;
+            if(pvzSunInterval)clearInterval(pvzSunInterval);
+            if(pvzWaveInterval)clearInterval(pvzWaveInterval);
+            if(pvzBulletInterval)clearInterval(pvzBulletInterval);
+            pvzSunInterval=pvzWaveInterval=pvzBulletInterval=null;
+        };
+
+        window.selectPvzPlant = function(type) {
+            if(!pvzRunning)return;
+            var costs={sunflower:50,peashooter:100,wallnut:50};
+            if(pvzSun<costs[type])return;
+            pvzSelectedPlant=type;
+            document.querySelectorAll('.pvz-plant-btn').forEach(function(b){b.classList.remove('selected');});
+            document.getElementById('pvz-btn-'+type).classList.add('selected');
+        };
+
+        function pvzCellClick(r,c) {
+            if(!pvzRunning||!pvzSelectedPlant||pvzGrid[r][c])return;
+            var costs={sunflower:50,peashooter:100,wallnut:50};
+            if(pvzSun<costs[pvzSelectedPlant])return;
+            pvzSun-=costs[pvzSelectedPlant];
+            document.getElementById('pvz-sun').textContent=pvzSun;
+            pvzGrid[r][c]={type:pvzSelectedPlant,hp:pvzSelectedPlant==='wallnut'?300:100};
+            var icons={sunflower:'🌻',peashooter:'🫛',wallnut:'🥜'};
+            var cellEl=document.querySelector('.pvz-cell[data-r="'+r+'"][data-c="'+c+'"]');
+            if(cellEl)cellEl.textContent=icons[pvzSelectedPlant];
+            pvzSelectedPlant=null;
+            document.querySelectorAll('.pvz-plant-btn').forEach(function(b){b.classList.remove('selected');});
+        }
+
+        function pvzSpawnSun() {
+            if(!pvzRunning)return;
+            var wrapper=document.getElementById('pvz-wrapper');
+            var sun=document.createElement('div');sun.className='pvz-sun-float';sun.textContent='☀️';
+            var left=20+Math.random()*380, top=10+Math.random()*200;
+            sun.style.left=left+'px';sun.style.top=top+'px';
+            sun.addEventListener('click',function(e){
+                e.stopPropagation();
+                pvzSun+=25;document.getElementById('pvz-sun').textContent=pvzSun;
+                this.remove();
+            });
+            wrapper.appendChild(sun);
+            setTimeout(function(){if(sun.parentNode)sun.remove();},6000);
+        }
+
+        function pvzNextWave() {
+            if(!pvzRunning)return;
+            pvzWave++;
+            if(pvzWave>PVZ_MAX_WAVES){stopPvZ();alert('🎉 恭喜！你成功抵御了所有僵尸波次！');return;}
+            document.getElementById('pvz-wave').textContent=pvzWave;
+            var count=1+Math.floor(pvzWave/2);
+            for(var i=0;i<count;i++){
+                var lane=Math.floor(Math.random()*PVZ_ROWS);
+                pvzZombies.push({lane:lane,x:PVZ_COLS*TET_SIZE+20+i*30,hp:50+pvzWave*10,speed:0.3+pvzWave*0.03});
+            }
+        }
+
+        function pvzGameTick() {
+            if(!pvzRunning)return;
+            var wrapper=document.getElementById('pvz-wrapper');
+            // Move zombies
+            for(var i=pvzZombies.length-1;i>=0;i--){
+                var z=pvzZombies[i];
+                var col=Math.floor(z.x/48);
+                // Check collision with plant
+                if(col>=0&&col<PVZ_COLS&&pvzGrid[z.lane][col]){
+                    var plant=pvzGrid[z.lane][col];
+                    plant.hp-=0.5;
+                    if(plant.hp<=0){
+                        pvzGrid[z.lane][col]=null;
+                        var cellEl=document.querySelector('.pvz-cell[data-r="'+z.lane+'"][data-c="'+col+'"]');
+                        if(cellEl)cellEl.textContent='';
+                    }
+                } else {
+                    z.x-=z.speed;
+                }
+                if(z.x<=-20){stopPvZ();alert('🧟 僵尸到达了左侧！游戏结束！');return;}
+            }
+            // Shoot bullets from peashooters
+            for(var r=0;r<PVZ_ROWS;r++)for(var c=0;c<PVZ_COLS;c++){
+                if(pvzGrid[r][c]&&pvzGrid[r][c].type==='peashooter'){
+                    // Check if zombie in lane
+                    var hasZombie=pvzZombies.some(function(z){return z.lane===r&&z.x>c*48;});
+                    if(hasZombie&&Math.random()<0.05){
+                        pvzBullets.push({lane:r,x:c*48+24});
+                    }
+                }
+            }
+            // Move bullets
+            for(var j=pvzBullets.length-1;j>=0;j--){
+                var b=pvzBullets[j];b.x+=3;
+                if(b.x>PVZ_COLS*48+50){pvzBullets.splice(j,1);continue;}
+                // Hit zombie
+                for(var k=pvzZombies.length-1;k>=0;k--){
+                    var zz=pvzZombies[k];
+                    if(zz.lane===b.lane&&Math.abs(zz.x-b.x)<20){
+                        zz.hp-=20;
+                        pvzBullets.splice(j,1);
+                        if(zz.hp<=0)pvzZombies.splice(k,1);
+                        break;
+                    }
+                }
+            }
+            document.getElementById('pvz-zombies-left').textContent=pvzZombies.length;
+            // Render zombies and bullets
+            wrapper.querySelectorAll('.pvz-zombie,.pvz-bullet').forEach(function(el){el.remove();});
+            pvzZombies.forEach(function(z){
+                var el=document.createElement('div');el.className='pvz-zombie';el.textContent='🧟';
+                el.style.left=z.x+'px';el.style.top=(z.lane*50+8)+'px';
+                wrapper.appendChild(el);
+            });
+            pvzBullets.forEach(function(b){
+                var el=document.createElement('div');el.className='pvz-bullet';
+                el.style.left=b.x+'px';el.style.top=(b.lane*50+20)+'px';
+                wrapper.appendChild(el);
+            });
+        }
+
+        // ============ 好词积累器 ============
+        var WORDS_DATA = [
+            {word:'静言思之',meaning:'安静地思考它。出自《诗经》',cat:'思考类'},
+            {word:'揆诸当下',meaning:'衡量当下的情况',cat:'思考类'},
+            {word:'君不见',meaning:'您难道没有看见吗？用于引起注意',cat:'思考类'},
+            {word:'虽则',meaning:'虽然、即使',cat:'思考类'},
+            {word:'于焉',meaning:'于是、在此',cat:'思考类'},
+            {word:'洵美',meaning:'确实美好。洵：确实',cat:'描写类'},
+            {word:'岂不',meaning:'难道不……吗？反问语气',cat:'思考类'},
+            {word:'亦已',meaning:'也已经、也就罢了',cat:'情感类'},
+            {word:'曷不',meaning:'何不、为什么不',cat:'思考类'},
+            {word:'何乃',meaning:'为何竟然、怎么能',cat:'思考类'},
+            {word:'既而',meaning:'不久之后、随后',cat:'时间类'},
+            {word:'须臾',meaning:'极短的时间、片刻',cat:'时间类'},
+            {word:'俄顷',meaning:'一会儿、转眼间',cat:'时间类'},
+            {word:'倏忽',meaning:'忽然、极快地',cat:'时间类'},
+            {word:'遽然',meaning:'突然、骤然',cat:'时间类'},
+            {word:'踯躅',meaning:'徘徊不前、犹豫不决',cat:'动作类'},
+            {word:'踟蹰',meaning:'犹豫、迟疑不前',cat:'动作类'},
+            {word:'怅惘',meaning:'惆怅迷惘、失落困惑',cat:'情感类'},
+            {word:'怅然',meaning:'失意不乐的样子',cat:'情感类'},
+            {word:'彷徨',meaning:'走来走去、犹豫不定',cat:'动作类'},
+            {word:'踌躇',meaning:'犹豫不决、从容自得',cat:'动作类'},
+            {word:'辗转',meaning:'翻来覆去、经过许多地方',cat:'动作类'},
+            {word:'徘徊',meaning:'在一个地方来回走动',cat:'动作类'},
+            {word:'徜徉',meaning:'安闲自在地行走',cat:'动作类'},
+            {word:'流连',meaning:'留恋不止、舍不得离去',cat:'情感类'},
+            {word:'缱绻',meaning:'情意缠绵、难舍难分',cat:'情感类'},
+            {word:'旖旎',meaning:'柔和美丽、婀娜多姿',cat:'描写类'},
+            {word:'翩跹',meaning:'轻快飘逸地舞动',cat:'描写类'},
+            {word:'氤氲',meaning:'烟气弥漫、气氛浓郁',cat:'描写类'},
+            {word:'潋滟',meaning:'水波荡漾、光彩闪耀',cat:'描写类'}
+        ];
+        var currentWordsCat = 'all';
+
+        function renderWordsGrid(words) {
+            var grid = document.getElementById('words-grid');
+            grid.innerHTML = '';
+            words.forEach(function(w) {
+                var card = document.createElement('div');
+                card.className = 'word-card';
+                card.innerHTML = '<div class="word-cat-tag">' + w.cat + '</div><div class="word-text">' + w.word + '</div><div class="word-meaning">' + w.meaning + '</div>';
+                card.addEventListener('click', function() {
+                    navigator.clipboard.writeText(w.word).then(function() {
+                        card.classList.add('copied');
+                        setTimeout(function(){card.classList.remove('copied');}, 1200);
+                    }).catch(function() {
+                        // Fallback
+                        var ta = document.createElement('textarea'); ta.value = w.word;
+                        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                        document.body.removeChild(ta);
+                        card.classList.add('copied');
+                        setTimeout(function(){card.classList.remove('copied');}, 1200);
+                    });
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        window.filterWordsByCat = function(cat) {
+            currentWordsCat = cat;
+            document.querySelectorAll('.words-cat-btn').forEach(function(b){b.classList.remove('active');});
+            event.target.classList.add('active');
+            filterWords();
+        };
+
+        window.filterWords = function() {
+            var search = (document.getElementById('words-search').value || '').trim().toLowerCase();
+            var filtered = WORDS_DATA.filter(function(w) {
+                var catMatch = currentWordsCat === 'all' || w.cat === currentWordsCat;
+                var searchMatch = !search || w.word.includes(search) || w.meaning.toLowerCase().includes(search);
+                return catMatch && searchMatch;
+            });
+            renderWordsGrid(filtered);
+        };
+
+        // Initialize words on first visit
+        renderWordsGrid(WORDS_DATA);
+
+        // ============ 反应时间测试器 ============
+        var reactionState = 'idle'; // idle, waiting, ready, result, early
+        var reactionStartTime = 0, reactionTimeout = null;
+        var reactionHistory = [], reactionBest = Infinity;
+
+        window.handleReactionClick = function() {
+            var area = document.getElementById('reaction-area');
+            var textEl = document.getElementById('reaction-text');
+            var subEl = document.getElementById('reaction-sub');
+
+            if (reactionState === 'idle' || reactionState === 'result' || reactionState === 'early') {
+                // Start
+                reactionState = 'waiting';
+                area.className = 'reaction-area state-waiting';
+                textEl.textContent = '等待变绿...';
+                subEl.textContent = '变绿后立即点击！';
+                var delay = 2000 + Math.random() * 3000;
+                reactionTimeout = setTimeout(function() {
+                    reactionState = 'ready';
+                    area.className = 'reaction-area state-ready';
+                    textEl.textContent = '点击！';
+                    subEl.textContent = '快！';
+                    reactionStartTime = performance.now();
+                }, delay);
+            } else if (reactionState === 'waiting') {
+                // Too early
+                clearTimeout(reactionTimeout);
+                reactionState = 'early';
+                area.className = 'reaction-area state-early';
+                textEl.textContent = '太早了！';
+                subEl.textContent = '等变绿再点击哦，点击重试';
+            } else if (reactionState === 'ready') {
+                // Got it
+                var elapsed = performance.now() - reactionStartTime;
+                reactionState = 'result';
+                area.className = 'reaction-area state-result';
+                textEl.textContent = Math.round(elapsed) + ' ms';
+                subEl.textContent = '点击再次测试';
+                reactionHistory.push(Math.round(elapsed));
+                if (Math.round(elapsed) < reactionBest) reactionBest = Math.round(elapsed);
+                updateReactionStats();
+            }
+        };
+
+        function updateReactionStats() {
+            document.getElementById('reaction-best').textContent = reactionBest === Infinity ? '-' : reactionBest + 'ms';
+            document.getElementById('reaction-count').textContent = reactionHistory.length;
+            var last5 = reactionHistory.slice(-5);
+            if (last5.length > 0) {
+                var avg = Math.round(last5.reduce(function(a,b){return a+b;},0) / last5.length);
+                document.getElementById('reaction-avg').textContent = avg + 'ms';
+            }
+            // Chart
+            var chart = document.getElementById('reaction-chart');
+            chart.innerHTML = '';
+            var display = reactionHistory.slice(-10);
+            var maxVal = Math.max.apply(null, display.concat([500]));
+            display.forEach(function(val) {
+                var bar = document.createElement('div');
+                bar.className = 'reaction-bar';
+                var h = Math.max(4, (val / maxVal) * 100);
+                bar.style.height = h + '%';
+                bar.innerHTML = '<span class="bar-val">' + val + '</span>';
+                if (val === reactionBest) bar.style.borderColor = 'var(--green)';
+                chart.appendChild(bar);
+            });
+        }
+
+        window.resetReaction = function() {
+            clearTimeout(reactionTimeout);
+            reactionState = 'idle'; reactionHistory = []; reactionBest = Infinity;
+            var area = document.getElementById('reaction-area');
+            area.className = 'reaction-area state-idle';
+            document.getElementById('reaction-text').textContent = '点击此处开始测试';
+            document.getElementById('reaction-sub').textContent = '等待变绿后尽快点击';
+            document.getElementById('reaction-best').textContent = '-';
+            document.getElementById('reaction-avg').textContent = '-';
+            document.getElementById('reaction-count').textContent = '0';
+            document.getElementById('reaction-chart').innerHTML = '';
+        };
+
         // 初始化大字报预览和抽取系统
         updatePosterPreview();
         initPickerGrid();
+        // 初始化挖雷
+        initMinesweeper();
 
     </script>
 </body>
