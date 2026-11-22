@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="ink">
+  <head>
+    <meta charset="UTF-8" />
+    <title>班级工具箱 · 墨玉鎏金</title>
+    <script>
+      /*
+       * GitHub Pages SPA 回退
+       * 直接访问 /picker 等深层路径时，GitHub Pages 会返回 404.html。
+       * 这里把原始路径写入 sessionStorage 后跳回首页，由前端路由接管。
+       */
+      (function () {
+        try {
+          var l = window.location;
+          var target = l.pathname + l.search + l.hash;
+          if (target && target !== '/404.html' && !/^\/404\.html/.test(l.pathname)) {
+            sessionStorage.setItem('sq:redirect', target);
+          }
+        } catch (e) {}
+        window.location.replace('/');
+      })();
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #080c18;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8a97b2;
+        font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+        letter-spacing: 0.3em;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>正在载入 班级工具箱 …</body>
+</html>
